@@ -1,0 +1,70 @@
+<%- include('partials/header.html') %>
+  <% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+  
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+<div class="main-content">
+  <div class="content2">
+    <div id="chat">
+      <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const nome = prompt('Qual seu nome?');
+
+        socket.emit('new user',nome);
+
+        socket.on('new user',function(data){
+          if(data.success){
+            alert('Bem-vindo ao Danki Chat '+nome);
+          }else{
+              alert('Já existe usuário com este nome....');
+              window.location.href= "/";
+          }
+        })
+
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+
+        form.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            if(input.value){
+                socket.emit('chat message',{msg:input.value,nome:nome});
+                input.value = '';
+            }
+        })
+        socket.on('chat message',(obj)=>{
+          console.log('msg recebida' +obj)
+            if(obj.nome == nome){
+              var item = document.createElement('li');
+              item.style.backgroundColor = 'gray';
+              item.textContent = obj.nome+' disse: '+obj.msg;
+              messages.appendChild(item);
+              window.scrollTo(0, document.body.scrollHeight);
+            }else{
+              var item = document.createElement('li');
+              item.textContent =obj.nome+' disse: '+obj.msg;
+              messages.appendChild(item);
+              window.scrollTo(0, document.body.scrollHeight);
+            }
+        })
+    </script>
+  </div>
+</div>
+
+
+<%- include('partials/footer.html') %>

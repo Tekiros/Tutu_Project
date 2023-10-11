@@ -1,0 +1,28 @@
+<%- include('partials/header.html') %>
+  <% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+<div class="center">
+    <div class="panel2">
+        <form method="post">
+            <h1>Faça seu login!</h2>
+            <br>
+            <h2>Email</h3><input type="email" name="email" placeholder="Seu Email">
+            <h2>Senha</h4><input type="password" name="password" placeholder="Sua Senha">
+            <br>
+            <br>
+            <input type="submit" name="acao" value="Logar">
+        </form>
+    </div>
+</div>
+<%- include('partials/footer.html') %>

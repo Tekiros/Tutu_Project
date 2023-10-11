@@ -1,0 +1,38 @@
+<%- include('partials/header.html') %>
+	<% if (flashMessages.error) { %>
+		<div class="flash-message error-message error">
+		<%= flashMessages.error %>
+		<button class="close-btn" onclick="closeFlash(this)">❌</button>
+		</div>
+	<% } %>
+	<% if (flashMessages.success) { %>
+		<div class="flash-message success-message success">
+		<%= flashMessages.success %>
+		<button class="close-btn" onclick="closeFlash(this)">❌</button>
+		</div>
+	<% } %>
+	<div class="main-content">
+		<div class="content1">
+			<div class="panel">
+				<h2>Bem-vindo, <%= user.apelido %>!</h2>
+			</div>
+			<div style="display: flex; align-items: center;" class="panel">
+				<h2>Busque um aluno! <i class="fas fa-angle-double-right"></i></h2>
+				<form><input class="placeholder-colorHome" style="width: 300px; text-align: center;margin: 1% 5%; padding: 5%; border: 3px solid #6D3BB8; border-radius: 30px;" type="text" name="busca" placeholder="Digite o nome do aluno"/></form>
+			</div>
+			<div class="panel">
+				<h2>CHAT ROLANDO AQUI AO VIVO ( SEM OPCAO DE COVERSAR, APENAS COM OPCAO DE ABRIR O CHAT)</h2>
+			</div>
+		</div>
+		<div class="ultimas-atividades">
+			<div class="atividades-topo">
+				<h2>Últimas atividades</h2>
+			</div>
+			<br />
+			<div id="notificationsContainer"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+
+	<script src="home.js"></script>
+<%- include('partials/footer.html') %>

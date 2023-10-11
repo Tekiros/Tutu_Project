@@ -1,0 +1,107 @@
+<%- include('partials/header.html') %>
+  <% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+  
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+<div class="main-content">
+  <div class="content2">
+    <h2 style="text-align: center;">Nome: <%= alunoId.name %> <%= alunoId.surname %></h2>
+    <h3 style="text-align: center;">Código do aluno: <%= alunoId.id_aluno %></h3>
+    <br>
+    <div class="panel">
+      <form action="/<%= alunoId._id %>/registerComment" method="post" class="add-comment">
+        <h2>Insira um título para o comentário</h2>
+        <textarea maxlength="150" id="commentTitle" name="commentTitle" placeholder="Insira seu titulo aqui ..." cols="10" rows="1"></textarea>
+        <br>
+        <br>
+        <h2>Insira seu comentário <p style="float: right;">( Limite de 1500 caracteres )</p></h2>
+        <textarea maxlength="1500" id="commentText" name="commentText" placeholder="Insira seu comentário aqui ..." cols="30" rows="10"></textarea>
+        <br>
+        <br>
+        <button class="more" id="addComent">Adicionar Comentário</button>
+
+        <div id="myModal" class="modal">
+          <div class="modal-content">
+            <span class="closeModal">❌</span>
+            <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja fazer esse comentário?</p>
+            <br><br>
+            <div class="buttons">
+              <button id="confirmBtn">Confirmar</button>
+              <button type="button" class="btnVoltar">Voltar</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="list"></div>
+    <div class="panel">
+      <h2 id="topComentarios" style="text-align: center;">Comentários</h2>
+        <ul>
+          <% 
+          const reversedComments = alunoId.comments.slice().reverse();
+
+          reversedComments.forEach((comment, index) => { %>
+          <div class="panel comentarioUnico">
+                <li style="color: #787171;" id="commentDefault<%= comment._id %>">
+                <div class="opcoesComentarios">
+                  <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
+                  <div class="menu2">
+                    <ul>
+                      <li><i class="fas fa-angle-double-right"></i><a onclick="toggleEditForm('<%= comment._id %>')"> Editar Comentário</a></li>
+                      <li><i class="fas fa-angle-double-right"></i><a onclick="toggleDeleteComment('<%= comment._id %>')" > Excluir Comentário</a></li>
+                    </ul>
+                  </div>
+              </div>
+                Comentário - <%= reversedComments.length - index %>:
+                <br>
+                <br>
+                <h2 style="color: black;"><%= comment.textTitle %></h2>
+                <br>
+                <% comment.text.split('\n').forEach(paragraph => { %>
+                <p style="color: black;"><%= paragraph %></p>
+                <% }) %>
+                <br>
+                <%= comment.author %> - <%= comment.getFormattedDate() %>
+              </li>
+              <form id="commentEdit<%= comment._id %>" action="/<%= alunoId._id %>/edit/<%= comment._id %>" method="POST" class="add-comment" style="display: none;">
+                <li style="color: #787171;">
+                Comentário - <%= reversedComments.length - index %>:
+                <br>
+                <br>
+                <textarea maxlength="150" id="commentTitle" name="commentTitle" cols="10" rows="1"><%= comment.textTitle %></textarea>
+                <br>
+                <textarea maxlength="1500" id="commentText" name="commentText" cols="30" rows="10"><%= comment.text %></textarea>
+                <br>
+                <%= comment.author %> - <%= comment.getFormattedDate() %>
+                <button>Salvar Comentário</button>
+              </li>
+            </form>
+          </div>
+          <% }) %>
+          <br>
+        </ul>
+    </div>
+
+    <div class="pagination panel">
+      <div class="first">&#171</div>
+      <div class="prev">&lt</div>
+      <div class="numbers">
+        <div>1</div>
+      </div>
+      <div class="next">&gt</div>
+      <div class="last">&#187</div>
+    </div>
+  </div>
+</div>
+
+<script src="singleFunctions.js"></script>
+<%- include('partials/footer.html') %>

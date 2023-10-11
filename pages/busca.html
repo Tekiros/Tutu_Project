@@ -1,0 +1,44 @@
+<%- include('partials/header.html') %>
+  <% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+
+<div class="main-content">
+    <div class="content2">
+         <div class="panel">
+            <h1 style="text-align: center;">Pesquise outro aluno</h1>
+            <form><input class="placeholder-color placeholder-colorBUSCA" type="text" name="busca" placeholder="Digite o nome do aluno" value="<%= busca %>"/></form>
+         </div>
+         <div class="resultadosFlex">
+          <div class="w80">
+            <h1 style="text-align: center;"><%= contagem %> Resultados</h1>
+          </div>
+          <div class="w20">
+            <h3>Filtrar busca</h3>
+            <select id="ordenacaoSelect">
+              <option value="maisComentarios">Mais Comentários</option>
+              <option value="ordemAlfabetica">Ordem Alfabética</option>
+            </select>
+          </div>
+         </div>
+        <% for(let i = 0; i < aluno.length; i++) { %>
+        <div class="panel">
+            <h2 style="text-align: center;">Nome: <%= aluno[i].name %> <%= aluno[i].surname %></h2>
+            <h4 style="text-align: center;">Código do aluno: <%= aluno[i].id_aluno %></h4>
+            <br>
+            <button class="more"><a href="<%= aluno[i]._id %>">Ver todos os comentários</a></button>
+        </div>
+        <% } %>
+    </div>
+</div>
+<%- include('partials/footer.html') %>

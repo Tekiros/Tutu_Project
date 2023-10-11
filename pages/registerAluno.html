@@ -1,0 +1,29 @@
+<%- include('partials/header.html') %>
+  <% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+    <div class="center">
+        <div class="panel2">
+            <h1>Cadastrar Aluno(a)</h1>
+            <br>
+            <form method="post">
+              <h2>Nome</h3><input type="text" name="name" placeholder="EX: Eduardo">
+              <h2>Sobrenome</h3><input type="text" name="surname" placeholder="EX: Henrique Murta Aguilar">
+              <h2>Identificador aluno</h3><input type="text" name="id_aluno" placeholder="123.554.866-55">
+              <br>
+              <br>
+              <input type="submit" name="acao" value="Cadastrar">
+            </form>
+        </div>
+    </div>
+<%- include('partials/footer.html') %>

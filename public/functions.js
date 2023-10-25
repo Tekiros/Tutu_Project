@@ -17,8 +17,9 @@ function closeFlash(button) {
 //////////////////////////////////////////////////////
 
 function menu(){
-  const sidebar = document.querySelector(".sidebar")
-  const titleH3 = document.getElementById('titleH3')
+  const sidebar = document.querySelector(".sidebar");
+  const sidebar2 = document.querySelector(".sidebar2")
+  const titleH3 = document.getElementById('titleH3');
 
   if(sidebar.style.display == "none"){
     sidebar.style.display = "block"
@@ -27,8 +28,33 @@ function menu(){
     sidebar.style.display = 'none'
     titleH3.style.display = 'block'
   }
+
+  if(sidebar2.style.display == "none"){
+    sidebar2.style.display = "block"
+    titleH3.style.display = 'none'
+  }else{
+    sidebar2.style.display = 'none'
+    titleH3.style.display = 'block'
+  }
 }
 
+function menu2(){
+  const sidebar2 = document.querySelector(".sidebar2")
+  const titleH3 = document.getElementById('titleH3');
+  const menuIcon = document.querySelector('.menu-icon');
+
+  if(sidebar2.style.display == "none"){
+    sidebar2.style.display = "block"
+    titleH3.style.display = 'none'
+    menuIcon.style.flexDirection = 'column'
+    menuIcon.style.marginLeft = '10%'
+  }else{
+    sidebar2.style.display = 'none'
+    titleH3.style.display = 'block'
+    menuIcon.style.flexDirection = 'row'
+    menuIcon.style.marginLeft = '0'
+  }
+}
 //////////////////////////////////////////////////////
 
 document.addEventListener('DOMContentLoaded', () => {

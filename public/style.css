@@ -8,7 +8,7 @@
 html,body{
 	height: 100%;
 	background: #FAF9FC;
-	overflow-y: hidden;
+	/* overflow-y: hidden; */
 }
 
 
@@ -37,6 +37,24 @@ div.sidebar{
 	height: 100%;
 	width: 15%;
 	float: left;
+}
+
+div.displayFlex{
+	display: flex;
+}
+
+div.sidebar2{
+	background: #2D3035;
+	width: 15%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	overflow-y: auto;
+}
+
+div.usuariosOnline{
+	text-align: center;
 }
 
 div.topo{
@@ -107,6 +125,12 @@ div.menu2 a{
 div.main-content{
 	display: flex;
 	height: 100%;
+}
+
+div.main-content2{
+	width: 85%;
+	max-height: 100vh;
+	margin-left: 15%;
 }
 
 header{
@@ -200,7 +224,7 @@ header{
 	width: 70%;
 	padding:30px;
 	overflow-y: auto;
-	height: calc(100% - 90px);
+	/* height: calc(100% - 90px); */
 }
 
 .content2{
@@ -209,6 +233,7 @@ header{
 	padding:30px;
 	overflow-y: auto;
 	color: #2D3035;
+	height: 100%;
 }
 
 .content2 h1,h2,h3,h4{
@@ -224,7 +249,7 @@ header{
 	border: 2px solid #dbdbdb;
 }
 
-.panel button.more{
+button.more{
 	display: flex;
 	font-size: 20px;
 	background-color: #2D3035;
@@ -237,7 +262,7 @@ header{
 	margin: 0 auto; 
 }
 
-.panel button.more:hover {
+button.more:hover {
 background-color: #6D3BB8;
 border-radius: 30px;
 transition: 0.3s;
@@ -307,7 +332,7 @@ transition: 0.3s;
 	background: #EAEBEB;
 	padding: 20px 40px;
 	overflow-y:hidden;
-	height: 100vw;
+	/* height: 100vw; */
 }
 
 .atividades-topo h2{
@@ -343,7 +368,6 @@ transition: 0.3s;
 
 .atividade-registro p{
 	color: #000000;
-	font-size: 18px;
 	font-weight: 600;
 }
 
@@ -376,33 +400,33 @@ transition: 0.3s;
 	transition: 0.3s;
 }
 
-.flash-message {
-padding: 10px;
-margin: 0 3% 0 20%;
-border: 1px solid;
-border-radius: 4px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
+.flash-message{
+	padding: 10px;
+	margin: 0 3% 0 20%;
+	border: 1px solid;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	}
 
-.error {
-background-color: #ffcccc;
-border-color: #ff3333;
-color: #ff3333;
-}
+.error{
+	background-color: #ffcccc;
+	border-color: #ff3333;
+	color: #ff3333;
+	}
   
-.success {
-background-color: #ccffcc;
-border-color: #33cc33;
-color: #33cc33;
-}
+.success{
+	background-color: #ccffcc;
+	border-color: #33cc33;
+	color: #33cc33;
+	}
   
-.close-btn {
-border: none;
-background: none;
-cursor: pointer;
-}
+.close-btn{
+	border: none;
+	background: none;
+	cursor: pointer;
+	}
 
 .resultadosFlex{
 	display: flex;
@@ -434,7 +458,7 @@ cursor: pointer;
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-	.modal-content {
+.modal-content {
 	background-color: white;
 	margin: 20% auto;
 	padding: 20px;
@@ -443,32 +467,32 @@ cursor: pointer;
 	text-align: center;
 }
 
-	.closeModal {
+.closeModal {
 	float: right;
 	cursor: pointer;
 }
 
-	.modal button{
+.modal button{
 	margin: 0;
 }
 
-	.modal button:nth-last-child(1){
+.modal button:nth-last-child(1){
 	color: black; 
 	background-color: #b7b7b7;
 }
 
-	.modal button:nth-last-child(1):hover{
+.modal button:nth-last-child(1):hover{
 	background-color: #878787;
 	color: white;
 }
 
-	.buttons{
+.buttons{
 	display: flex;
 	justify-content: space-between;
 	margin: 0 10%;
 }
 
-	.buttons span{
+.buttons span{
 	width: 250px;
 	height: 40px;
 	border-radius: 30px;
@@ -480,12 +504,12 @@ cursor: pointer;
 	cursor: pointer;
 }
 
-	.opcoesComentarios{
+.opcoesComentarios{
 	float: right;
 	cursor: pointer;
 }
 
-	.opcoesComentarios i{
+.opcoesComentarios i{
 	font-size: 22px;
 }
 
@@ -517,35 +541,86 @@ cursor: pointer;
 }
 
 
-
-#form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-#input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-#input:focus { outline: none; }
-#form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
-#messages { list-style-type: none; margin: 0; padding: 0; }
-#messages > li { padding: 0.5rem 1rem; }
-#messages > li{ background-color: white;}
-@media screen and (max-width: 980px){
-	.resultadosFlex{
-		display: block;
-	}
-	.w20{
-		margin: auto;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.w20 select{
-		margin: 10%;
-	}
+#chat{
+	padding-bottom: 4%
 }
 
-@media screen and (max-width: 800px){
+#form{
+	background: rgba(0, 0, 0, 0.15); 
+	padding: 0.25rem; 
+	position: fixed; 
+	bottom: 0; 
+	right: 0; 
+	display: flex; 
+	width: 85%; 
+	height: 3rem; 
+	box-sizing: border-box; 
+
+	backdrop-filter: blur(10px); 
+}
+#input{
+	border: none;
+	 padding: 0 1rem; 
+	 flex-grow: 1; 
+	 border-radius: 2rem; 
+	 margin: 0.25rem;
+	}
+#input:focus{ 
+	outline: none; 
+}
+
+#form > button{
+	background: #333; 
+	border: none; 
+	padding: 0 1rem; 
+	margin: 0.25rem; 
+	border-radius: 3px; 
+	outline: none; 
+	cursor: pointer;
+}
+
+#form > button:hover{
+	transition: 100ms;  
+	background: #000000;
+
+}
+
+#form > button > h2{
+	color: white;
+}
+
+#form > button > h2:hover{
+	transition: 100ms; 
+	color: #6D3BB8;
+}
+
+#messages{
+	display: flex; 
+	flex-direction: column; 
+	list-style-type: none;
+}
+
+#messages > li{
+	background-color: white; 
+	border-radius: 20px; 
+	margin: 7px; 
+	padding: 0.5rem 1rem;
+}
+
+#messages .mensagemUsuarioAtual{
+	display: flex; 
+	justify-content: flex-end;
+}
+
+#moreMessage{
+	text-align: center;
+}
+
+@media screen and (max-width: 900px){
 	header{display: block;}
 	.ultimas-atividades{display: none;}
 	.panel{width: 100% !important;}
-	.sidebar{
+	.sidebar, .sidebar2{
 		display: none;
 		position: relative;
 		z-index: 9999;
@@ -582,6 +657,14 @@ cursor: pointer;
 		padding: 0;
 		float: none;
 	}
+	#form{
+		width: 100%;
+	}
+
+	div.main-content2{
+		width: 100%;
+		margin-left: 0;
+	}
 }
 
 @media screen and (max-width: 500px){
@@ -614,5 +697,14 @@ cursor: pointer;
 		margin: 1%;
 		border: 3px solid #2D3035;
 		border-radius: 20px;
+	}
+	.resultadosFlex{
+		flex-direction: column;
+	}
+	.resultadosFlex > .w80 > h1{
+		margin-left: 0;
+	}
+	.w20{
+		width: 100%;
 	}
 }

@@ -21,18 +21,51 @@
 				<form><input class="placeholder-colorHome" style="width: 300px; text-align: center;margin: 1% 5%; padding: 5%; border: 3px solid #6D3BB8; border-radius: 30px;" type="text" name="busca" placeholder="Digite o nome do aluno"/></form>
 			</div>
 			<div class="panel">
-				<h2>CHAT ROLANDO AQUI AO VIVO ( SEM OPCAO DE COVERSAR, APENAS COM OPCAO DE ABRIR O CHAT)</h2>
+				<div id="chat">
+					<ul id="messages">
+						<h2 style="text-align: center;">Chat</h2>
+						<h4 style="text-align: center; color: #7F7F7F;">Últimas mensagens</h4>
+						<br>
+						<% mensagem.forEach((mensagem)=>{ %>
+							<li class="mensagemSingle"><p style="font-weight: 600;color: black;"><%= mensagem.professor %> </p><br><p style="color: black;"><%= mensagem.mensagem %></p></li>
+						<% }); %>
+					  </ul>
+				</div>
 			</div>
 		</div>
 		<div class="ultimas-atividades">
 			<div class="atividades-topo">
 				<h2>Últimas atividades</h2>
 			</div>
-			<br />
+			<br>
 			<div id="notificationsContainer"></div>
 		</div>
 	</div>
 	<div class="clear"></div>
-
+	<script>
+	  (async ()=>{
+		const mensagemSingle = document.querySelectorAll('.mensagemSingle');
+		const nomeUsuarioAtual = '<%= user.apelido %>';
+		const JSON = await fetch('/auth/mensagens');
+		if(!JSON.ok){
+		  throw new Error('Erro ao buscar notificações');
+		}
+	  
+		const dadosJSON = await JSON.json();
+		const mensagensUsuarioAtual = dadosJSON.filter((mensagem)=> mensagem.professor === nomeUsuarioAtual);
+	  
+		mensagemSingle.forEach((mensagem)=>{
+		  const mensagemTexto = mensagem.textContent;
+		  const nomeProfessor = mensagemTexto.split(' ')[0];
+		  const mensagemSemNome = mensagemTexto.replace(nomeProfessor + ' ', '');
+	  
+		  if(nomeProfessor === nomeUsuarioAtual){
+			mensagem.textContent = mensagemSemNome;
+			mensagem.style.backgroundColor = 'RGBA(109,59,184,0.38)'
+			mensagem.classList.add('mensagemUsuarioAtual');
+		  }
+		});
+	  })();
+	</script>
 	<script src="home.js"></script>
 <%- include('partials/footer.html') %>

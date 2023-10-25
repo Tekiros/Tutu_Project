@@ -10,6 +10,7 @@ const Aluno = require('./alunosSchema.js');
 const Notification = require('./notificationsSchema.js');
 const Professor = require('./professorSchema')
 const BlacklistToken = require('./blacklistTokenSchema');
+const HistoricoChat = require('./historicoChat.js');
 const flash = require('connect-flash');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -18,10 +19,14 @@ require('dotenv').config();
 
 
 const secret = process.env.SECRET;
-let decodedToken = '';
-let token = '';
+var decodedToken = '';
+var token = '';
 const dbUser = process.env.DB_USER
 const dbPassword = process.env.DB_PASS
+// var usuarios = [];
+var socketIds = [];
+const usuariosOnline = [];
+
 
 
 app.engine('html', require('ejs').renderFile);
@@ -87,43 +92,52 @@ async function verifyToken (req,res,next){
 }
 }
 
-app.get('/socket.io/socket.io.js', (req, res)=>{
-  res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
+io.on('connection', (socket)=>{
+  socket.on('new user', (data)=>{
+    if(usuariosOnline.indexOf(data) !== -1){
+      socket.emit('new user', {success: false});
+    }else{
+      usuariosOnline.push(data);
+      socketIds.push(socket.id);
+      socket.emit('new user', {success: true});
+      io.emit('online users', usuariosOnline);
+      console.log(data +` connected`);
+    }
+  });
 
-});
-var usuarios = [];
-var socketIds = [];
-io.on('connection',(socket)=>{
-  socket.on('new user',function(data){
-      if(usuarios.indexOf(data) != -1){
-          socket.emit('new user',{success: false});
-      }else{
-          usuarios.push(data);
-          socketIds.push(socket.id);
-          socket.emit('new user',{success: true});
-          //Emit para os outros usuários dizendo que tem um novo usuário ativo.
-          //socket.broadcast.emit("hello", "world");
-      }
-  })
+  socket.on('chat message', async (obj)=>{
+    if(usuariosOnline.indexOf(obj.nome) !== -1 && usuariosOnline.indexOf(obj.nome) === socketIds.indexOf(socket.id)){
+      io.emit('chat message', obj);
+    }else{
+      console.log('Erro: Você não tem permissão para executar a ação.');
+    }
 
-  socket.on('chat message',(obj)=>{
-    console.log(obj)
-      if(usuarios.indexOf(obj.nome) != -1 && usuarios.indexOf(obj.nome) == socketIds.indexOf(socket.id)){
-          io.emit('chat message',obj);
-      }else{
-          console.log('Erro: Você não tem permissão para executar a ação.');
-      }
-  })
+    try {
+      const professor = await Professor.findById(decodedToken.id, '-password');
+      const mensagem = obj.msg;
+
+      const historicoChat = new HistoricoChat({
+        professor: `${professor.apelido}`,
+        mensagem: mensagem,
+      });
+
+      await historicoChat.save();
+    }catch(error){
+      console.log(error);
+    }
+  });
 
   socket.on('disconnect', () => {
-      let id = socketIds.indexOf(socket.id);
-      socketIds.splice(id,1);
-      usuarios.splice(id,1);
-      console.log(socketIds);
-      console.log(usuarios);
-      console.log('user disconnected');
+    const id = socketIds.indexOf(socket.id);
+    if (id !== -1) {
+      const disconnectedUser = usuariosOnline[id];
+      usuariosOnline.splice(id, 1);
+      socketIds.splice(id, 1);
+      io.emit('online users', usuariosOnline);
+      console.log(`${disconnectedUser} disconnected`);
+    }
   });
-})
+});
 
 
 app.get('/', verifyToken, async (req,res)=>{
@@ -132,13 +146,21 @@ app.get('/', verifyToken, async (req,res)=>{
 
     if(token){
       try{
+        var historicomensagens = (await HistoricoChat.find().sort({createdAt: -1}).limit(5)).reverse();
+        var dadosMensagem = historicomensagens.map(historicoMensagem =>({
+            professor: historicoMensagem.professor,
+            mensagem: historicoMensagem.mensagem,
+        }));
+
+        ////////////////////////////////////////////////////////
+
         decodedToken = jwt.verify(token, secret);
         
         Professor.findById(decodedToken.id, '-password').then((user)=>{
           if(!user){
             res.redirect('/auth/login');
           }else{
-            res.render('home',{user:user});
+            res.render('home',{user:user, mensagem:dadosMensagem});
           }
         }).catch(()=>{
           req.flash('error', 'Erro ao buscar dados');
@@ -176,6 +198,53 @@ app.get('/', verifyToken, async (req,res)=>{
       req.flash('error', 'Erro ao buscar dados');
       return res.redirect('/?busca=SemResultados');
     }
+  }
+});
+
+app.get('/auth/login', (req,res)=>{
+  res.render('login');
+});
+
+app.post('/auth/login', async (req,res)=>{
+  const {email, password} = req.body;
+
+  if(!email){
+    req.flash('error', 'O email é obrigatório');
+    return res.redirect('/auth/login');
+  }
+  if(!password){
+    req.flash('error', 'Senha incorreta');
+    return res.redirect('/auth/login');
+  }
+
+  const user = await Professor.findOne({email:email});
+
+  if(!user){
+    req.flash('error', 'Esse Usuário não existe!');
+    return res.redirect('/auth/login');
+  }
+
+  const checkPassword = await bcrypt.compare(password, user.password);
+
+  if(!checkPassword){
+    req.flash('error', 'Senha incorreta');
+    return res.redirect('/auth/login');
+  }
+  try{
+    const token = jwt.sign(
+      {
+        id:user._id,
+      },
+      secret,
+      {
+        expiresIn: '60s',
+      }
+    )
+    res.cookie('token', token, {httpOnly: true, maxAge: 60000});
+    res.redirect('/');
+  }catch(err){
+    req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');
+    return res.redirect('/auth/registerAluno');
   }
 });
 
@@ -225,58 +294,13 @@ app.post('/auth/registerProfessor', verifyToken, async (req,res)=>{
 
   try{
     await user.save();
+
     req.flash('success', 'Professor(a) cadastrado com sucesso');
     return res.redirect('/auth/registerProfessor');
+    
   }catch(err){
     req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde // Esse aluno(a) já pode estar cadastrado');
     return res.redirect('/auth/registerProfessor');
-  }
-});
-
-app.get('/auth/login', (req,res)=>{
-  res.render('login');
-});
-
-app.post('/auth/login', async (req,res)=>{
-  const {email, password} = req.body;
-
-  if(!email){
-    req.flash('error', 'O email é obrigatório');
-    return res.redirect('/auth/login');
-  }
-  if(!password){
-    req.flash('error', 'Senha incorreta');
-    return res.redirect('/auth/login');
-  }
-
-  const user = await Professor.findOne({email:email});
-
-  if(!user){
-    req.flash('error', 'Esse Usuário não existe!');
-    return res.redirect('/auth/login');
-  }
-
-  const checkPassword = await bcrypt.compare(password, user.password);
-
-  if(!checkPassword){
-    req.flash('error', 'Senha incorreta');
-    return res.redirect('/auth/login');
-  }
-  try{
-    const token = jwt.sign(
-      {
-        id:user._id,
-      },
-      secret,
-      {
-        expiresIn: '60s',
-      }
-    )
-    res.cookie('token', token, {httpOnly: true, maxAge: 60000});
-    res.redirect('/');
-  }catch(err){
-    console.log(err);
-    res.status(500).json({msg:'Aconteceu um erro no servidor, tente novamente mais tarde'})
   }
 });
 
@@ -342,7 +366,7 @@ app.get('/:id', verifyToken, async (req,res)=>{
   }
 });
 
-app.post('/:id/registerComment', verifyToken, async (req, res) => {
+app.post('/:id/registerComment', verifyToken, async (req, res)=>{
   const {id} = req.params;
   const {commentText,commentTitle} = req.body;
 
@@ -356,17 +380,17 @@ app.post('/:id/registerComment', verifyToken, async (req, res) => {
 
     const professor = await Professor.findById(decodedToken.id, '-password');
 
-    if(!professor) {
+    if(!professor){
       req.flash('error', 'Professor não encontrado');
       return res.redirect(`/${id}`);
     }
 
-    if(!commentTitle) {
+    if(!commentTitle){
       req.flash('error', 'Você precisa adicionar um título ao comentário.');
       return res.redirect(`/${id}`);
     }
 
-    if(!commentText) {
+    if(!commentText){
       req.flash('error', 'Você precisa adicionar um comentário.');
       return res.redirect(`/${id}`);
     }
@@ -382,7 +406,7 @@ app.post('/:id/registerComment', verifyToken, async (req, res) => {
     //////////////////////////////////////////////
 
     const notification = new Notification({
-      text: `${professor.apelido} fez um comentário em ${aluno.name}.`,
+      text: `${professor.apelido} fez um comentário em ${aluno.name} ${aluno.surname}.`,
       aluno: aluno._id,
     });
 
@@ -397,7 +421,7 @@ app.post('/:id/registerComment', verifyToken, async (req, res) => {
   }
 });
 
-app.get('/auth/notifications', verifyToken, async (req, res) => {
+app.get('/auth/notifications', verifyToken, async (req, res)=>{
   try{
     const notifications = await Notification.find()
       .sort({createdAt: -1})
@@ -409,7 +433,7 @@ app.get('/auth/notifications', verifyToken, async (req, res) => {
   }
 });
 
-app.get('/:id/delete/:commentId', verifyToken, async (req, res) => {
+app.get('/:id/delete/:commentId', verifyToken, async (req, res)=>{
   const{id, commentId} = req.params;
   const professor = await Professor.findById(decodedToken.id, '-password');
 
@@ -446,7 +470,7 @@ app.get('/:id/delete/:commentId', verifyToken, async (req, res) => {
   }
 });
 
-app.post('/:id/edit/:commentId', verifyToken, async (req, res) => {
+app.post('/:id/edit/:commentId', verifyToken, async (req, res)=>{
   const{id, commentId} = req.params;
   const professor = await Professor.findById(decodedToken.id, '-password');
   const {commentTitle, commentText} = req.body;
@@ -488,18 +512,78 @@ app.post('/:id/edit/:commentId', verifyToken, async (req, res) => {
   }
 });
 
-app.get('/auth/chat', verifyToken, async (req,res)=>{
-  res.render('chat');
+app.get('/auth/chat', verifyToken, async (req, res) => {
+  token = req.cookies.token;
+
+  if(token){
+    try {
+      decodedToken = jwt.verify(token, secret);
+
+      const messageLimit = req.session.messageLimit || 8;
+
+      const historicomensagens = (await HistoricoChat.find().sort({ createdAt: -1 }).limit(messageLimit)).reverse();
+      const dadosMensagem = historicomensagens.map((historicoMensagem) => ({
+        professor: historicoMensagem.professor,
+        mensagem: historicoMensagem.mensagem,
+      }));
+
+      Professor.findById(decodedToken.id, '-password').then((user) => {
+        if(!user){
+          res.redirect('/auth/login');
+        }else{
+          res.render('chat', {user:user, mensagem:dadosMensagem});
+        }
+      }).catch(()=>{
+        req.flash('error', 'Erro ao buscar mensagens');
+        return res.redirect('/');
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
 });
 
-app.get('/auth/logout', verifyToken, async (req, res) => {
+app.post('/auth/chat/increase-limit', verifyToken, (req, res)=>{
+  const increment = 30;
+
+  let messageLimit = req.session.messageLimit || 30;
+
+  messageLimit += increment;
+
+  req.session.messageLimit = messageLimit;
+
+  res.redirect('/auth/chat');
+});
+
+app.get('/auth/mensagens', verifyToken, async (req, res)=>{
+  token = req.cookies.token;
+  const historicomensagens = await HistoricoChat.find();
+
+  try{
+    decodedToken = jwt.verify(token, secret);
+    
+    Professor.findById(decodedToken.id, '-password').then((user)=>{
+      const dadosMensagem = historicomensagens.map(historicoMensagem =>({
+          professor: historicoMensagem.professor,
+          mensagem: historicoMensagem.mensagem,
+          usuarioAtual: historicoMensagem.professor === user.apelido,
+      }));
+
+      res.json(dadosMensagem);
+    });
+    }catch(error){
+      req.flash('error', 'Erro ao buscar mensagens');
+    }
+});
+
+app.get('/auth/logout', verifyToken, async (req, res)=>{
   res.clearCookie('token');
   token = req.cookies.token;
 
   try {
     const existingToken = await BlacklistToken.findOne({ token: token });
-    if (existingToken) {
-      return res.status(401).json({ msg: 'Token Inválido' });
+    if (existingToken){
+      req.flash('error', 'Token Inválido');
     }
 
     const blacklistToken = new BlacklistToken({ token: token });
@@ -508,8 +592,7 @@ app.get('/auth/logout', verifyToken, async (req, res) => {
     req.flash('success', 'Você saiu da sua conta com sucesso!');
     return res.redirect('/auth/login');
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ msg: 'Aconteceu um erro no servidor, tente novamente mais tarde' });
+    req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');
   }
 });
 
@@ -517,6 +600,6 @@ app.get('/:slug', verifyToken, async (req,res)=>{
   res.send(req.params.slug)
 });
 
-app.listen(3000,()=>{
+http.listen(3000,()=>{
   console.log('Servidor funcionando');
 });

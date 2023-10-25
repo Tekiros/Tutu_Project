@@ -7,7 +7,7 @@ const notificationSchema = new mongoose.Schema({
   expireAt:{
     type: Date,
     default: Date.now,
-    index: {expires: '5d'},
+    index: {expires: '7d'},
   },
 });
 

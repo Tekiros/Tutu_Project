@@ -117,7 +117,7 @@ function updateCommentsDisplay() {
 function scroll(){
   const topComentariosElement = document.getElementById('topComentarios');
   if(topComentariosElement){
-    topComentariosElement.scrollIntoView({behavior: 'smooth' });
+    topComentariosElement.scrollIntoView({behavior: 'smooth'});
   }
 }
 

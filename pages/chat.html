@@ -1,70 +1,163 @@
-<%- include('partials/header.html') %>
-  <% if (flashMessages.error) { %>
-    <div class="flash-message error-message error">
-      <%= flashMessages.error %>
-      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>E.E Comendador Murta</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
+	<link href="../public/style.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="menu-icon" onclick="menu2()">
+      <h1><i style="margin-left: 10%; color: #6D3BB8;" class="fas fa-align-justify"></i></h1>
+      <h3 id="titleH3">E.E. Comendador Murta</h3>
     </div>
-  <% } %>
+    <div class="clear"></div>
+  </header>
+	<div class="displayFlex">
+    <div class="sidebar2">
+      <div class="topo">
+        <h3>E.E. Comendador Murta</h3>
+      </div>
+      <div class="menu">
+        <ul>
+          <li><i class="fas fa-angle-double-right"></i><a href="/"> Home</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/?busca="> Buscar Aluno</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/chat"> Chat Professores</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/registerAluno"> Cadastrar Aluno(a)</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/registerProfessor"> Cadastrar Professor(a)</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/logout"> Sair</a></li>
+        </ul>
+      </div>
+      <div class="usuariosOnline">
+        <h2 style="color: white;">Professores Online</h2>
+        <ul id="online-users-list"></ul>
+      </div>
+    </div>
+
   
-  <% if (flashMessages.success) { %>
-    <div class="flash-message success-message success">
-      <%= flashMessages.success %>
-      <button class="close-btn" onclick="closeFlash(this)">❌</button>
-    </div>
-  <% } %>
-<div class="main-content">
-  <div class="content2">
-    <div id="chat">
-      <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
+    <div class="main-content2">
+      <div id="chat">
+        <ul id="messages">
+          <h3 style="text-align: center;">Mensagens antigas</h3>
+          <br>
+          <form id="moreMessage" action="/auth/chat/increase-limit" method="POST">
+            <button class="more" type="submit">Carregar mais mensagens</button>
+          </form>
+          <br>
+          <% mensagem.forEach((mensagem)=>{ %>
+            <li class="mensagemSingle"><p style="font-weight: 600;"><%= mensagem.professor %> </p><br><p><%= mensagem.mensagem %></p></li>
+          <% }); %>
+          <br>
+          <h3 id="h3" style="text-align: center;">Mensagens recentes</h3>
+          <br>
+        </ul>
+      <form id="form">
+        <input maxlength="3000" id="input" autocomplete="off" /><button><h2><i class="fas fa-paper-plane"></i></h2></button>
+      </form>
+  
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', ()=>{
+          const socket = io();
+          const nomeUsuarioAtual = '<%= user.apelido %>';
+          const messages = document.getElementById('messages');
+          const form = document.getElementById('form');
+          const input = document.getElementById('input');
+          const mensagemSingle = document.querySelectorAll('.mensagemSingle');
+          const onlineUsersList = document.getElementById('online-users-list');
+      
+          ////////////////////////////////////////
 
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script>
-        const socket = io();
-        const nome = prompt('Qual seu nome?');
+          (async ()=>{
+            const JSON = await fetch('/auth/mensagens');
+            if(!JSON.ok){
+              throw new Error('Erro ao buscar notificações');
+            }
+      
+            const dadosJSON = await JSON.json();
+            const mensagensUsuarioAtual = dadosJSON.filter((mensagem)=> mensagem.professor === nomeUsuarioAtual);
+      
+            mensagemSingle.forEach((mensagem)=>{
+              const mensagemTexto = mensagem.textContent;
+              const nomeProfessor = mensagemTexto.split(' ')[0];
+              const mensagemSemNome = mensagemTexto.replace(nomeProfessor + ' ', '');
+      
+              if(nomeProfessor === nomeUsuarioAtual){
+                mensagem.textContent = mensagemSemNome;
+                mensagem.style.backgroundColor = 'RGBA(109,59,184,0.38)'
+                mensagem.classList.add('mensagemUsuarioAtual');
+              }
+            });
+          })();
 
-        socket.emit('new user',nome);
-
-        socket.on('new user',function(data){
-          if(data.success){
-            alert('Bem-vindo ao Danki Chat '+nome);
-          }else{
-              alert('Já existe usuário com este nome....');
-              window.location.href= "/";
-          }
-        })
-
-        var messages = document.getElementById('messages');
-        var form = document.getElementById('form');
-        var input = document.getElementById('input');
-
-        form.addEventListener('submit',(e)=>{
+          ////////////////////////////////////////////////
+      
+          socket.emit('new user', nomeUsuarioAtual);
+      
+          form.addEventListener('submit', async (e)=>{
             e.preventDefault();
             if(input.value){
-                socket.emit('chat message',{msg:input.value,nome:nome});
-                input.value = '';
+              socket.emit('chat message',{msg:input.value, nome:nomeUsuarioAtual});
+              input.value = '';
             }
-        })
-        socket.on('chat message',(obj)=>{
-          console.log('msg recebida' +obj)
-            if(obj.nome == nome){
-              var item = document.createElement('li');
-              item.style.backgroundColor = 'gray';
-              item.textContent = obj.nome+' disse: '+obj.msg;
+          });
+          
+          socket.on('chat message', async (obj)=>{
+            if(obj.nome == nomeUsuarioAtual){
+              const item = document.createElement('li');
+              item.setAttribute('name', 'mensagem');
+              item.style.backgroundColor = 'RGBA(109,59,184,0.38)';
+              item.classList.add('mensagemUsuarioAtual');
+              item.textContent = obj.msg;
               messages.appendChild(item);
-              window.scrollTo(0, document.body.scrollHeight);
+              window.scrollTo(0, document.body.scrollHeight)
+      
             }else{
-              var item = document.createElement('li');
-              item.textContent =obj.nome+' disse: '+obj.msg;
+              const item = document.createElement('li');
+              const pNome = document.createElement('p');
+              const br = document.createElement('br');
+              const pMsg = document.createElement('p');
+              pNome.style.fontWeight = '600'
+              pNome.textContent = obj.nome;
+              pMsg.textContent = obj.msg;
               messages.appendChild(item);
-              window.scrollTo(0, document.body.scrollHeight);
+              item.appendChild(pNome);
+              item.appendChild(br);
+              item.appendChild(pMsg);
+              window.scrollTo(0, document.body.scrollHeight)
             }
-        })
-    </script>
+          });
+
+          ////////////////////////////////
+
+          socket.on('online users', (users)=>{
+            onlineUsersList.innerHTML = '';
+
+            users.forEach((user) => {
+              const listItem = document.createElement('li');
+              listItem.style.color = 'white'
+              listItem.textContent = `✅ ` +user;
+              onlineUsersList.appendChild(listItem);
+            });
+          });
+        });
+      </script>
+    </div>
   </div>
 </div>
 
+<% if (flashMessages.error) { %>
+  <div class="flash-message error-message error">
+    <%= flashMessages.error %>
+    <button class="close-btn" onclick="closeFlash(this)">❌</button>
+  </div>
+<% } %>
 
+<% if (flashMessages.success) { %>
+  <div class="flash-message success-message success">
+    <%= flashMessages.success %>
+    <button class="close-btn" onclick="closeFlash(this)">❌</button>
+  </div>
+<% } %>
 <%- include('partials/footer.html') %>

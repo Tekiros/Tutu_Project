@@ -62,9 +62,9 @@ router.post('/login', async (req,res)=>{
             expiresIn: '600s',
         }
         );
-        res.clearCookie('email');
-        console.log('token emitido2')
-        res.cookie('token', token, {httpOnly:true, maxAge:600000, secure:true, sameSite: 'Strict'});
+
+        res.cookie('token', token, {httpOnly:true, maxAge:600000});
+        //secure:true, sameSite:'Strict'
         res.redirect('/');
     }catch(err){
         req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');

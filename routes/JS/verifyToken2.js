@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const BlacklistToken = require('../../blacklistTokenSchema.js');
 const secret = process.env.SECRET;
 
-async function verifyLogin (req,res,next){
+async function verifyToken2 (req,res,next){
     tokenCreateProfessor = req.cookies.tokenCreateProfessor;
     const existingToken = await BlacklistToken.findOne({tokenCreateProfessor:tokenCreateProfessor});
   
@@ -11,7 +11,7 @@ async function verifyLogin (req,res,next){
       return res.redirect('/auth/verifyLogin');
     }
     if(!tokenCreateProfessor){
-      return res.redirect('/');
+      return res.redirect('/auth/verifyLogin');
     }
     try{
       decodedToken = jwt.verify(tokenCreateProfessor, secret);
@@ -23,4 +23,4 @@ async function verifyLogin (req,res,next){
     }
 }
 
-module.exports = verifyLogin;
+module.exports = verifyToken2;

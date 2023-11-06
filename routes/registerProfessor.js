@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const verifyLogin = require('./JS/verifyLogin.js');
+const verifyToken2 = require('./JS/verifyToken2.js');
 const verifyToken = require('./JS/verifyToken.js');
 const bcrypt = require('bcrypt');
 
 const Professor = require('../professorSchema.js');
 
 
-router.get('/registerProfessor',verifyLogin, verifyToken, async (req,res)=>{
+router.get('/registerProfessor', verifyToken2, verifyToken, async (req,res)=>{
     res.render('registerProfessor')
 });
   
-router.post('/registerProfessor', verifyLogin, verifyToken, async (req,res)=>{
+router.post('/registerProfessor', verifyToken2, verifyToken, async (req,res)=>{
     const {name, apelido, materia, email, password, confirmpassword} = req.body;
     const userExist = await Professor.findOne({email:email});
 

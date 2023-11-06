@@ -62,7 +62,8 @@ router.post('/verifyLogin', async (req,res)=>{
         }
         );
         
-        res.cookie('tokenCreateProfessor', tokenCreateProfessor, {httpOnly:true, maxAge:120000, secure:true, sameSite:'Strict'});
+        res.cookie('tokenCreateProfessor', tokenCreateProfessor, {httpOnly:true, maxAge:120000});
+        //secure:true, sameSite:'Strict'
         res.redirect('/auth/registerProfessor');
     }catch(err){
         req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');

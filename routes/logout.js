@@ -6,7 +6,6 @@ const BlacklistToken = require('../blacklistTokenSchema.js');
 
 
 router.get('/logout', verifyToken, async (req,res)=>{
-  res.clearCookie('token');
   token = req.cookies.token;
 
   try{
@@ -15,8 +14,11 @@ router.get('/logout', verifyToken, async (req,res)=>{
       req.flash('error', 'Token Inválido');
     }
 
-    const blacklistToken = new BlacklistToken({token: token});
+    const blacklistToken = new BlacklistToken({token:token, tokenCreateProfessor:tokenCreateProfessor});
     await blacklistToken.save();
+
+    res.clearCookie('tokenCreateProfessor');
+    res.clearCookie('token');
 
     req.flash('success', 'Você saiu da sua conta com sucesso!');
     return res.redirect('/auth/login');

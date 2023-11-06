@@ -616,6 +616,21 @@ transition: 0.3s;
 	text-align: center;
 }
 
+#online-users-list{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	list-style-type: none;
+	justify-content: space-around;
+}
+
+.passwordRegiter{
+	margin-bottom: 0;
+    font-size: 12px;
+    line-height: 15px;
+	display: none;
+}
+
 @media screen and (max-width: 900px){
 	header{display: block;}
 	.ultimas-atividades{display: none;}

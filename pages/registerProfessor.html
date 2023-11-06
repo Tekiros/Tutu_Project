@@ -18,15 +18,18 @@
             <h1>Cadastrar Professor(a)</h1>
             <br>
             <form method="post">
-                <input type="text" name="name" placeholder="Seu nome">
+                <input type="text" name="name" placeholder="Nome completo">
                 <br>
-                <input type="text" name="apelido" placeholder="Como deseja ser chamado/apelido?">
+                <input type="text" name="apelido" placeholder="Apelido ou primeiro nome">
                 <br>
                 <input type="text" name="materia" placeholder="Matéria Lecionada">
                 <br>
                 <input type="email" name="email" placeholder="E-mail">
                 <br>
-                <input type="password" name="password" placeholder="Sua Senha">
+                <input id="passwordRegiter" type="password" name="password" placeholder="Sua Senha">
+                <div class="passwordRegiter">
+                  <p>As senhas devem ter pelo menos 6 caracteres.</p>
+                </div>
                 <br>
                 <input type="password" name="confirmpassword" placeholder="Confirme sua senha">
                 <br>
@@ -34,4 +37,5 @@
             </form>
         </div>
     </div>
+    <script src="../../public/registerProfessor.js"></script>
 <%- include('partials/footer.html') %>

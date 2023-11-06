@@ -1,12 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', ()=>{
     const notificationsContainer = document.getElementById('notificationsContainer');
     notificationsContainer.innerHTML = '';
   
-    async function atualizarNotificacoes() {
-      try {
+    async function atualizarNotificacoes(){
+      try{
         const response = await fetch('/auth/notifications');
   
-        if (!response.ok) {
+        if(!response.ok){
           throw new Error('Erro ao buscar notificações');
         }
   
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
         notificationsContainer.innerHTML = '';
   
-        notifications.forEach((notification) => {
+        notifications.forEach((notification)=>{
           const notificationText = notification.text;
           const createdAt = new Date(notification.createdAt);
   
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
           notificationsContainer.appendChild(notificationElement);
           notificationElement.appendChild(notificationCircle);
         });
-      } catch (error){
+      }catch (error){
         console.error('Erro ao buscar notificações:', error);
       }
     }

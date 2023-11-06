@@ -82,8 +82,8 @@
               const mensagemTexto = mensagem.textContent;
               const nomeProfessor = mensagemTexto.split(' ')[0];
               const mensagemSemNome = mensagemTexto.replace(nomeProfessor + ' ', '');
-      
-              if(nomeProfessor === nomeUsuarioAtual){
+
+              if(nomeProfessor == nomeUsuarioAtual){
                 mensagem.textContent = mensagemSemNome;
                 mensagem.style.backgroundColor = 'RGBA(109,59,184,0.38)'
                 mensagem.classList.add('mensagemUsuarioAtual');
@@ -134,11 +134,16 @@
           socket.on('online users', (users)=>{
             onlineUsersList.innerHTML = '';
 
-            users.forEach((user) => {
+            users.forEach((user)=>{
               const listItem = document.createElement('li');
               listItem.style.color = 'white'
-              listItem.textContent = `✅ ` +user;
-              onlineUsersList.appendChild(listItem);
+              if(user == nomeUsuarioAtual){
+
+              }else{
+                listItem.textContent = `✅ ` +user;
+                onlineUsersList.appendChild(listItem);
+              }
+              console.log(users)
             });
           });
         });

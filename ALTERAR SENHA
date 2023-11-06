@@ -1,0 +1,27 @@
+app.post('/changePassword', verifyToken, async (req, res) => {
+  const { newPassword } = req.body;
+  const userId = req.user.id; // Recupere o ID do usuário de alguma forma (por exemplo, do token JWT)
+
+  if (!newPassword) {
+    req.flash('error', 'A nova senha é obrigatória.');
+    return res.redirect('/auth/changePassword');
+  }
+
+  if (newPassword.length < minPasswordLength) {
+    req.flash('error', 'A nova senha está muito curta. É necessário ter no mínimo 6 caracteres.');
+    return res.redirect('/auth/changePassword');
+  }
+
+  const salt = await bcrypt.genSalt(12);
+  const passwordHash = await bcrypt.hash(newPassword, salt);
+
+  try {
+    // Atualize o hash da senha no banco de dados
+    await Professor.findByIdAndUpdate(userId, { password: passwordHash });
+    req.flash('success', 'Senha alterada com sucesso');
+    return res.redirect('/auth/changePassword');
+  } catch (err) {
+    req.flash('error', 'Aconteceu um erro no servidor. Tente novamente mais tarde.');
+    return res.redirect('/auth/changePassword');
+  }
+});

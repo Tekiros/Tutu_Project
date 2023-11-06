@@ -1,7 +1,7 @@
-function removeFlashMessages() {
+function removeFlashMessages(){
   const flashMessages = document.querySelectorAll('.flash-message');
 
-  flashMessages.forEach((message) => {
+  flashMessages.forEach((message)=>{
     setTimeout(() => {
       message.style.display = 'none';
     }, 5000);
@@ -57,10 +57,10 @@ function menu2(){
 }
 //////////////////////////////////////////////////////
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', ()=>{
   const ordenacaoSelect = document.getElementById('ordenacaoSelect');
   
-  ordenacaoSelect.addEventListener('change', () => {
+  ordenacaoSelect.addEventListener('change', ()=>{
     const opcaoSelecionada = ordenacaoSelect.value;
     const buscaQuery = new URLSearchParams(window.location.search);
     

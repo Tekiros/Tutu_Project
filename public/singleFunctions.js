@@ -3,16 +3,17 @@ const modal = document.getElementById("myModal");
 const confirmBtn = document.getElementById("confirmBtn");
 const closeModal = document.querySelector(".closeModal");
 const commentText = document.getElementById('commentText');
+const commentTitle = document.getElementById('commentTitle');
 const textModal = document.getElementById('textModal');
 const btnVoltar = document.querySelector('.btnVoltar');
 
-addComent.addEventListener("click", (e) => {
-  if(commentText.value === ''){
-      textModal.innerText = 'Você precisa inserir um comentário!';
-    }else{
-      modal.style.display = "block";
-      e.preventDefault()
-    }
+addComent.addEventListener("click", (e)=>{
+  if(commentText.value == '' || commentTitle.value == ''){
+    textModal.innerText = 'Você precisa inserir um comentário!';
+  }else{
+    modal.style.display = "block";
+    e.preventDefault();
+  }
 });
 
 btnVoltar.addEventListener("click", ()=>{
@@ -33,36 +34,35 @@ window.addEventListener("click", (event)=>{
 
 const opcoesComentarios = document.querySelectorAll('.opcoesComentarios');
 
-function openMenu2(event){
-  opcaoComentario = event.target;
-  menuComentario = opcaoComentario.parentElement.nextElementSibling;
+const optionsComments = {
 
-  if(menuComentario.style.display == 'none'){
-    menuComentario.style.display = 'block'
-  }else{
-    menuComentario.style.display = 'none'
-  }
-    
-}
-
-function toggleEditForm(commentId) {
-  var liElement = document.getElementById(`commentDefault${commentId}`);
-  var formElement = document.getElementById(`commentEdit${commentId}`);
+  openMenu2(event){
+    opcaoComentario = event.target;
+    menuComentario = opcaoComentario.parentElement.nextElementSibling;
   
-  if(liElement && formElement) {
-    if(liElement.style.display === "none") {
-      liElement.style.display = "block";
-      formElement.style.display = "none";
-    } else {
-      liElement.style.display = "none";
-      formElement.style.display = "block";
+    if(menuComentario.style.display == 'none'){
+      menuComentario.style.display = 'block'
+    }else{
+      menuComentario.style.display = 'none'
+    } 
+  },
+
+  toggleEditForm(commentId){
+    var liElement = document.getElementById(`commentDefault${commentId}`);
+    var formElement = document.getElementById(`commentEdit${commentId}`);
+    
+    if(liElement && formElement) {
+      if(liElement.style.display === "none") {
+        liElement.style.display = "block";
+        formElement.style.display = "none";
+      } else {
+        liElement.style.display = "none";
+        formElement.style.display = "block";
+      }
     }
-  }
+  },
 
-
-}
-
-function toggleDeleteComment(commentId){
+  toggleDeleteComment(commentId){
     modal.style.display = 'block'
     textModal.innerText = '';
     textModal.innerText = 'Você tem certeza que deseja excluir esse comentário?';
@@ -70,8 +70,8 @@ function toggleDeleteComment(commentId){
     var urlSplit = urlId.split('/');
     var id = urlSplit[urlSplit.length - 1];
     var url = `/${id}/delete/${commentId}`
-
-
+  
+  
     confirmBtn.addEventListener('click', (e)=>{
       if(confirmBtn){
         window.location.href = url
@@ -81,13 +81,11 @@ function toggleDeleteComment(commentId){
         e.preventDefault()
       }
     });
-
-
+  },
 
 }
 
-opcoesComentarios.forEach((opcaoComentario)=>{opcaoComentario.addEventListener('click', openMenu2)});
-
+opcoesComentarios.forEach((opcaoComentario)=>{opcaoComentario.addEventListener('click', optionsComments.openMenu2)});
 ////////////////////////////////////////////////////////////////
 
 const divsComentarioUnico = Array.from(document.querySelectorAll('.comentarioUnico'));
@@ -95,31 +93,11 @@ const perPage = 10;
 let currentPage = 1;
 const totalPage = Math.ceil(divsComentarioUnico.length / perPage);
 
-const html = {
+const html ={
   get(element) {
     return document.querySelector(element);
   }
 };
-
-function updateCommentsDisplay() {
-  const startIndex = (currentPage - 1) * perPage;
-  const endIndex = startIndex + perPage;
-
-  divsComentarioUnico.forEach((comment, index) => {
-    if (index >= startIndex && index < endIndex) {
-      comment.style.display = 'block';
-    } else {
-      comment.style.display = 'none';
-    }
-  });
-}
-
-function scroll(){
-  const topComentariosElement = document.getElementById('topComentarios');
-  if(topComentariosElement){
-    topComentariosElement.scrollIntoView({behavior: 'smooth'});
-  }
-}
 
 const controls = {
   next() {
@@ -180,7 +158,7 @@ const list = {
 
     updateCommentsDisplay();
   }
-}
+};
 
 const buttons = {
   element: html.get('.pagination .numbers'),
@@ -229,16 +207,36 @@ const buttons = {
   }
 };
 
+function updateCommentsDisplay() {
+  const startIndex = (currentPage - 1) * perPage;
+  const endIndex = startIndex + perPage;
+
+  divsComentarioUnico.forEach((comment, index) => {
+    if (index >= startIndex && index < endIndex) {
+      comment.style.display = 'block';
+    } else {
+      comment.style.display = 'none';
+    }
+  });
+};
+
+function scroll(){
+  const topComentariosElement = document.getElementById('topComentarios');
+  if(topComentariosElement){
+    topComentariosElement.scrollIntoView({behavior: 'smooth'});
+  }
+};
+
 function update() {
   list.update();
   buttons.update();
-}
+};
 
 function init() {
   update();
   controls.createListeners();
   updateCommentsDisplay();
-}
+};
 
 init();
 

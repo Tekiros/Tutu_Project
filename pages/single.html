@@ -51,38 +51,38 @@
 
           reversedComments.forEach((comment, index) => { %>
           <div class="panel comentarioUnico">
-                <li style="color: #787171;" id="commentDefault<%= comment._id %>">
-                <div class="opcoesComentarios">
-                  <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
-                  <div class="menu2">
-                    <ul>
-                      <li><i class="fas fa-angle-double-right"></i><a onclick="toggleEditForm('<%= comment._id %>')"> Editar Comentário</a></li>
-                      <li><i class="fas fa-angle-double-right"></i><a onclick="toggleDeleteComment('<%= comment._id %>')" > Excluir Comentário</a></li>
-                    </ul>
-                  </div>
-              </div>
-                Comentário - <%= reversedComments.length - index %>:
-                <br>
-                <br>
-                <h2 style="color: black;"><%= comment.textTitle %></h2>
-                <br>
-                <% comment.text.split('\n').forEach(paragraph => { %>
-                <p style="color: black;"><%= paragraph %></p>
-                <% }) %>
-                <br>
-                <%= comment.author %> - <%= comment.getFormattedDate() %>
-              </li>
-              <form id="commentEdit<%= comment._id %>" action="/<%= alunoId._id %>/edit/<%= comment._id %>" method="POST" class="add-comment" style="display: none;">
-                <li style="color: #787171;">
-                Comentário - <%= reversedComments.length - index %>:
-                <br>
-                <br>
-                <textarea maxlength="150" id="commentTitle" name="commentTitle" cols="10" rows="1"><%= comment.textTitle %></textarea>
-                <br>
-                <textarea maxlength="1500" id="commentText" name="commentText" cols="30" rows="10"><%= comment.text %></textarea>
-                <br>
-                <%= comment.author %> - <%= comment.getFormattedDate() %>
-                <button>Salvar Comentário</button>
+          <li style="color: #787171;" id="commentDefault<%= comment._id %>">
+          <div class="opcoesComentarios">
+            <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
+            <div class="menu2">
+              <ul>
+                <li><i class="fas fa-angle-double-right"></i><a onclick="optionsComments.toggleEditForm('<%= comment._id %>')"> Editar Comentário</a></li>
+                <li><i class="fas fa-angle-double-right"></i><a onclick="optionsComments.toggleDeleteComment('<%= comment._id %>')" > Excluir Comentário</a></li>
+              </ul>
+            </div>
+            </div>
+              Comentário - <%= reversedComments.length - index %>:
+              <br>
+              <br>
+              <h2 style="color: black;"><%= comment.textTitle %></h2>
+              <br>
+              <% comment.text.split('\n').forEach(paragraph => { %>
+              <p style="color: black;"><%= paragraph %></p>
+              <% }) %>
+              <br>
+              <%= comment.author %> - <%= comment.getFormattedDate() %>
+            </li>
+            <form id="commentEdit<%= comment._id %>" action="/<%= alunoId._id %>/edit/<%= comment._id %>" method="POST" class="add-comment" style="display: none;">
+              <li style="color: #787171;">
+              Comentário - <%= reversedComments.length - index %>:
+              <br>
+              <br>
+              <textarea maxlength="150" id="commentTitle" name="commentTitle" cols="10" rows="1"><%= comment.textTitle %></textarea>
+              <br>
+              <textarea maxlength="1500" id="commentText" name="commentText" cols="30" rows="10"><%= comment.text %></textarea>
+              <br>
+              <%= comment.author %> - <%= comment.getFormattedDate() %>
+              <button>Salvar Comentário</button>
               </li>
             </form>
           </div>

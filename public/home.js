@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
           notificationsContainer.appendChild(notificationElement);
           notificationElement.appendChild(notificationCircle);
         });
-      }catch (error){
+      }catch(error){
         console.error('Erro ao buscar notificações:', error);
       }
     }

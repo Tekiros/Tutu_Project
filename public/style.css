@@ -706,7 +706,7 @@ transition: 0.3s;
 	.panel:not(.pagination){
 		flex-direction: column
 	}
-	.panel2 input[type=text], [type=password], [type=email] {
+	.panel2 input[type=text],[type=password],[type=email]{
 		width: 80%;
 		height: 50px;
 		margin: 1%;
@@ -721,5 +721,8 @@ transition: 0.3s;
 	}
 	.w20{
 		width: 100%;
+	}
+	#messages{
+		padding-bottom: 8%;
 	}
 }

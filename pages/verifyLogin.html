@@ -1,24 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>E.E Comendador Murta</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
-	<link href="../public/style.css" rel="stylesheet">
-</head>
-<body>
-	<div class="sidebar">
-		<div class="topo">
-			<h3>E.E. Comendador Murta</h3>
-		</div>
-	</div>
-	<header>
-		<div class="menu-icon" onclick="menu()">
-			<h1><i style="margin-left: 10%; color: #6D3BB8;" class="fas fa-align-justify"></i></h1>
-			<h3 id="titleH3">E.E. Comendador Murta</h3>
-		</div>
-		<div class="clear"></div>
-	</header>
+<%- include('partials/header.html') %>
   <% if (flashMessages.error) { %>
     <div class="flash-message error-message error">
       <%= flashMessages.error %>
@@ -46,6 +26,5 @@
         </form>
     </div>
 </div>
-
 <script src="../../public/login.js"></script>
 <%- include('partials/footer.html') %>

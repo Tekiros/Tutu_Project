@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>E.E Comendador Murta</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
+	<link href="../public/style.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="menu-icon" onclick="menu.menu2()">
+      <h1><i style="margin-left: 10%; color: #6D3BB8;" class="fas fa-align-justify"></i></h1>
+      <h3 id="titleH3">E.E. Comendador Murta</h3>
+    </div>
+    <div class="clear"></div>
+  </header>
+	<div class="displayFlex">
+    <div class="sidebar2">
+      <div class="topo">
+        <h3>E.E. Comendador Murta</h3>
+      </div>
+      <div class="menu">
+        <ul>
+          <li><i class="fas fa-angle-double-right"></i><a href="/"> Home</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/?busca="> Buscar Aluno</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/chat"> Chat Professores</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/registerAluno"> Cadastrar Aluno(a)</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/registerProfessor"> Cadastrar Professor(a)</a></li>
+          <li><i class="fas fa-angle-double-right"></i><a href="/auth/logout"> Sair</a></li>
+        </ul>
+      </div>
+      <div class="usuariosOnline">
+        <h2 style="color: white;">Professores Online</h2>
+        <ul id="online-users-list"></ul>
+      </div>
+    </div>

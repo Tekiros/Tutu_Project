@@ -47,6 +47,7 @@ const dbPassword = process.env.DB_PASS;
 mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@projecttutu.yvxoqct.mongodb.net/DataBase_1?retryWrites=true&w=majority`,{useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
   console.log('Conectado com sucesso');
 }).catch((err)=>{
+  console.log("Erro ao estabelecer conexão com o servidor")
   console.log(err.message);
 });
 
@@ -69,7 +70,7 @@ io.on('connection', (socket)=>{
     const professor = obj.nome;
     const mensagem = obj.msg;
 
-    if (onlineUsers[professor] === socket.id){
+    if(onlineUsers[professor] === socket.id){
       io.emit('chat message', obj);
 
       try{

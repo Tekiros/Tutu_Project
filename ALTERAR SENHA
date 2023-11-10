@@ -17,7 +17,7 @@ app.post('/changePassword', verifyToken, async (req, res) => {
 
   try {
     // Atualize o hash da senha no banco de dados
-    await Professor.findByIdAndUpdate(userId, { password: passwordHash });
+    await Professor.findByIdAndUpdate(userId, {password: passwordHash});
     req.flash('success', 'Senha alterada com sucesso');
     return res.redirect('/auth/changePassword');
   } catch (err) {

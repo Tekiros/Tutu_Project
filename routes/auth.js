@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const verifyToken = require('./JS/verifyToken.js');
 const Professor = require('../professorSchema.js');
 const Aluno = require('../alunosSchema.js');

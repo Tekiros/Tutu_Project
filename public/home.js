@@ -5,17 +5,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
     async function atualizarNotificacoes(){
       try{
         const response = await fetch('/auth/notifications');
-  
+    
         if(!response.ok){
           throw new Error('Erro ao buscar notificações');
         }
-  
+    
         const notifications = await response.json();
-  
+    
         function calculateTimeElapsed(createdAt){
           const currentTime = new Date();
           const timeDifference = Math.floor((currentTime - createdAt) / 60000);
-  
+    
           if(timeDifference < 1){
             return 'Agora mesmo';
           }else if(timeDifference === 1){
@@ -30,34 +30,34 @@ document.addEventListener('DOMContentLoaded', ()=>{
             return `${days} dias atrás`;
           }
         }
-  
+    
         notificationsContainer.innerHTML = '';
-  
+    
         notifications.forEach((notification)=>{
-          const notificationText = notification.text;
-          const createdAt = new Date(notification.createdAt);
-  
+          const {text, createdAt} = notification;
+    
           const notificationElement = document.createElement('div');
           const notificationCircle = document.createElement('div');
           const notificationTextElement = document.createElement('p');
           const timeElapsedElement = document.createElement('p');
-  
+    
           notificationElement.className = 'atividade-registro';
           notificationCircle.className = 'circle-atividade';
-  
-          const timeElapsed = calculateTimeElapsed(createdAt);
-          notificationTextElement.textContent = notificationText;
+    
+          const timeElapsed = calculateTimeElapsed(new Date(createdAt));
+          notificationTextElement.textContent = text;
           timeElapsedElement.textContent = timeElapsed;
-  
+    
           notificationElement.appendChild(notificationTextElement);
           notificationElement.appendChild(timeElapsedElement);
-          notificationsContainer.appendChild(notificationElement);
           notificationElement.appendChild(notificationCircle);
+          notificationsContainer.appendChild(notificationElement);
         });
       }catch(error){
         console.error('Erro ao buscar notificações:', error);
       }
     }
+    
     setInterval(atualizarNotificacoes, 60000);
 
     atualizarNotificacoes();

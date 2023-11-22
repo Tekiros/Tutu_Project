@@ -6,9 +6,10 @@ const Aluno = require('../alunosSchema.js');
 const Notification = require('../notificationsSchema.js');
 
 
-router.post('/:id/registerComment', verifyToken, async (req,res)=>{
+router.post('/:id/registerComment', verifyToken, async (req,res, e)=>{
   const {id} = req.params;
   const {commentText,commentTitle} = req.body;
+  const maxCommentLength = [150, 1500];
 
   try{
     const aluno = await Aluno.findById(id);
@@ -33,6 +34,17 @@ router.post('/:id/registerComment', verifyToken, async (req,res)=>{
     if(!commentText){
       req.flash('error', 'Você precisa adicionar um comentário.');
       return res.redirect(`/${id}`);
+    }
+
+    if(commentTitle.length > maxCommentLength[0]){
+      req.flash('error', 'O título excedeu o limite de caracteres.');
+      return res.redirect(`/${id}`);
+    }
+
+    if(commentText.length > maxCommentLength[1]){
+      req.flash('error', 'O comentário excedeu o limite de caracteres.');
+      return res.redirect(`/${id}`);
+
     }
 
     aluno.comments.push({

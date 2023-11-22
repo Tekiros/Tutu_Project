@@ -47,7 +47,7 @@ router.post('/login', async (req,res)=>{
     //console.log(`Tempo de verificação da senha: ${verificationTime} milissegundos`);
 
     if(!checkPassword){
-        res.cookie('email', email);
+        res.cookie('email', email, {httpOnly:true, maxAge:600000});
         req.flash('error', 'Credenciais inválidas');
         return res.redirect('/auth/login');
     }

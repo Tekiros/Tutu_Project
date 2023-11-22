@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('./JS/verifyToken.js');
+
 const BlacklistToken = require('../blacklistTokenSchema.js');
 
 

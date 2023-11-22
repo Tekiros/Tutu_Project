@@ -133,7 +133,6 @@ app.use('/auth', logout);
 app.use('/auth', slug);
 
 
-
 http.listen(3000, ()=>{
   console.log('Servidor funcionando');
 }); 

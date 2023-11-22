@@ -207,7 +207,7 @@ const buttons = {
   }
 };
 
-function updateCommentsDisplay() {
+const updateCommentsDisplay = ()=>{
   const startIndex = (currentPage - 1) * perPage;
   const endIndex = startIndex + perPage;
 
@@ -220,19 +220,19 @@ function updateCommentsDisplay() {
   });
 };
 
-function scroll(){
+const scroll = ()=>{
   const topComentariosElement = document.getElementById('topComentarios');
   if(topComentariosElement){
     topComentariosElement.scrollIntoView({behavior: 'smooth'});
   }
 };
 
-function update() {
+const update = ()=>{
   list.update();
   buttons.update();
 };
 
-function init() {
+const init = ()=>{
   update();
   controls.createListeners();
   updateCommentsDisplay();
@@ -241,4 +241,3 @@ function init() {
 init();
 
 ////////////////////////////////////////////////////////////////////
-

@@ -1,4 +1,4 @@
-function removeFlashMessages(){
+const removeFlashMessages = ()=>{
   const flashMessages = document.querySelectorAll('.flash-message');
 
   flashMessages.forEach((message)=>{
@@ -9,7 +9,7 @@ function removeFlashMessages(){
 }
 window.onload = removeFlashMessages;
 
-function closeFlash(button) {
+const closeFlash = (button)=>{
   const flashMessage = button.closest('.flash-message');
   flashMessage.remove();
 }

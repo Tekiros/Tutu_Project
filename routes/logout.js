@@ -14,8 +14,9 @@ router.get('/logout', verifyToken, async (req,res)=>{
       req.flash('error', 'Token Inválido');
     }
 
-    const blacklistToken = new BlacklistToken({token:token, tokenCreateProfessor:tokenCreateProfessor});
+    const blacklistToken = new BlacklistToken({token:token});
     await blacklistToken.save();
+
 
     res.clearCookie('tokenCreateProfessor');
     res.clearCookie('token');

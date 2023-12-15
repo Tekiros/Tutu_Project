@@ -47,7 +47,7 @@ router.post('/login', async (req,res)=>{
     //console.log(`Tempo de verificação da senha: ${verificationTime} milissegundos`);
 
     if(!checkPassword){
-        res.cookie('email', email, {httpOnly:true, maxAge:600000});
+        res.cookie('email', email);
         req.flash('error', 'Credenciais inválidas');
         return res.redirect('/auth/login');
     }
@@ -63,6 +63,7 @@ router.post('/login', async (req,res)=>{
         }
         );
 
+        res.clearCookie('email');
         res.cookie('token', token, {httpOnly:true, maxAge:600000});
         //secure:true, sameSite:'Strict'
         res.redirect('/');

@@ -22,6 +22,8 @@ router.get('/', verifyToken, async (req,res)=>{
   
           Professor.findById(req.user.id, '-password').then((user)=>{
             if(!user){
+              res.clearCookie('token');
+              res.clearCookie('tokenCreateProfessor');
               res.redirect('/auth/login');
             }else{
               res.render('home',{user:user, mensagem:dadosMensagem});

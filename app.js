@@ -101,6 +101,8 @@ io.on('connection', (socket)=>{
 
 const login = require('./routes/login.js');
 const auth = require('./routes/auth.js');
+const editProfile = require('./routes/editProfile.js');
+const deleteProfile = require('./routes/deleteProfile.js');
 const chat = require('./routes/chat.js');
 const chatIncreaseLimit = require('./routes/chatIncreaseLimit.js');
 const mensagens = require('./routes/mensagens.js');
@@ -118,6 +120,8 @@ const verifyLogin = require('./routes/verifyLogin.js');
 
 app.use('/auth', login);
 app.use('/', auth);
+app.use('/auth', editProfile);
+app.use('/auth', deleteProfile);
 app.use('/auth', chat);
 app.use('/auth', chatIncreaseLimit);
 app.use('/auth', mensagens);

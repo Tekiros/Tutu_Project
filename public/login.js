@@ -8,3 +8,5 @@ const emailValue = decodeURIComponent(
 if(emailValue){
   document.getElementById('emailInput').value = emailValue;
 }
+
+console.log(emailValue)

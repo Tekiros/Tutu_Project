@@ -85,7 +85,7 @@ router.post('/registerProfessor', verifyToken2, verifyToken, async (req,res)=>{
     return res.redirect('/auth/registerProfessor');
     
   }catch(err){
-    req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde // Esse aluno(a) já pode estar cadastrado');
+    req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde // Esse professor(a) já pode estar cadastrado');
     return res.redirect('/auth/registerProfessor');
   }
 });

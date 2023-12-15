@@ -282,6 +282,45 @@ transition: 0.3s;
 	font-weight: normal;
 }
 
+.panel h2 #editProfileBtn{
+	color: #717171;
+}
+
+.panel h2 #editProfileBtn{
+    color: #717171;
+    transition: transform 0.5s ease; /* Adiciona uma transição suave para a rotação */
+}
+
+.panel h2 #editProfileBtn:hover{
+	color: #6D3BB8;
+  transform: rotate(180deg); /* Aplica uma rotação de 360 graus quando o mouse estiver sobre o botão */
+}
+
+#editProfileText {
+	position: relative;
+	cursor: pointer;
+}
+
+#editProfileText::after{
+	content: 'Editar perfil';
+	position: relative;
+	top: 0;
+	right: -100%;
+	width: 100%;
+	height: 100%;
+	color: #333;
+	padding: 10px;
+	transition: right 0.3s ease-out;
+	visibility: hidden;
+	font-weight: normal;
+}
+
+#editProfileText:hover::after{
+	right: 0;
+	visibility: visible;
+}
+
+
 .panel p{
 	font-size: 17px;
 	color: #B2B2B2;	
@@ -455,6 +494,8 @@ transition: 0.3s;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
+	transition: background-color 0.3s ease;
+	backdrop-filter: blur(5px);
 }
 
 .modal-content {
@@ -484,6 +525,24 @@ transition: 0.3s;
 	background-color: #878787;
 	color: white;
 }
+
+button.deleteProfileBtn {
+	background: #ffffff;
+	border: none;
+	color: red;
+	cursor: pointer;
+	font-weight: 500;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button.deleteProfileBtn:hover {
+	background-color: #ffdddd;
+	color: #ff0000; 
+	border: 1px solid #ff0000;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); 
+}
+
 
 .buttons{
 	display: flex;

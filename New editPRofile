@@ -1,0 +1,96 @@
+router.post('/editProfile', verifyToken, async (req, res) => {
+  try {
+    const { name, apelido, materia, email, password, confirmpassword } = req.body;
+    const professor = await Professor.findById(req.user.id, '-password');
+    const userExist = await Professor.findOne({ email: email });
+
+    const calcEmail = {
+      maxEmailLength() {
+        if (email.length > 200) {
+          req.flash('error', 'Seu e-mail possui mais de 200 caracteres. Por segurança não podemos cadastrar esse e-mail, por favor escolha outro.');
+          return true; // Indica que houve um redirecionamento
+        }
+        return false;
+      },
+
+      verifyEmail() {
+        if (userExist) {
+          throw new Error('E-mail já está em uso.');
+        }
+      }
+    };
+
+    const calcPassword = {
+      maxPasswordLength() {
+        if (password.length > 50) {
+          req.flash('error', 'Sua senha possui mais de 50 caracteres. Por segurança não podemos cadastrar essa senha, por favor escolha outra.');
+          return true; // Indica que houve um redirecionamento
+        }
+        return false;
+      },
+
+      minPasswordLength() {
+        if (password.length < 6) {
+          req.flash('error', 'Sua senha está muito curta. É necessário ter no mínimo 6 caracteres.');
+          return true; // Indica que houve um redirecionamento
+        }
+        return false;
+      },
+
+      checkPassword() {
+        if (password !== confirmpassword) {
+          req.flash('error', 'As senhas não conferem!');
+          return true; // Indica que houve um redirecionamento
+        }
+        return false;
+      },
+    };
+
+    // Verificações de senha no início
+    if (calcPassword.maxPasswordLength() || calcPassword.minPasswordLength() || calcPassword.checkPassword()) {
+      return res.redirect('/auth/editProfile');
+    }
+
+    // Demais verificações
+    if (name === '') {
+      req.flash('error', 'Você precisa preencher o campo "Nome Completo".');
+      return res.redirect('/auth/editProfile');
+    }
+    professor.name = name;
+
+    if (apelido === '') {
+      req.flash('error', 'Você precisa preencher o campo "Apelido ou primeiro nome".');
+      return res.redirect('/auth/editProfile');
+    }
+    professor.apelido = apelido;
+
+    if (materia === '') {
+      req.flash('error', 'Você precisa preencher o campo "Matéria Lecionada".');
+      return res.redirect('/auth/editProfile');
+    }
+    professor.materia = materia;
+
+    if (email !== professor.email) {
+      if (calcEmail.maxEmailLength()) {
+        return res.redirect('/auth/editProfile');
+      }
+      calcEmail.verifyEmail();
+      professor.email = email;
+    }
+
+    if (password) {
+      const salt = await bcrypt.genSalt(12);
+      const passwordHash = await bcrypt.hash(password, salt);
+      professor.password = passwordHash;
+    }
+
+    await professor.save();
+
+    req.flash('success', 'Dados atualizados com sucesso');
+    return res.redirect('/auth/editProfile');
+  } catch (error) {
+    console.error(error);
+    req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde // Esse e-mail já pode estar cadastrado');
+    return res.redirect('/auth/editProfile');
+  }
+});

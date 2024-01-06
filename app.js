@@ -101,7 +101,7 @@ io.on('connection', (socket)=>{
 
 const login = require('./routes/login.js');
 const auth = require('./routes/auth.js');
-const editProfile = require('./routes/editProfile.js');
+const editProfile = require('./routes/idEditProfile.js');
 const deleteProfile = require('./routes/deleteProfile.js');
 const chat = require('./routes/chat.js');
 const chatIncreaseLimit = require('./routes/chatIncreaseLimit.js');
@@ -109,13 +109,16 @@ const mensagens = require('./routes/mensagens.js');
 const registerAluno = require('./routes/registerAluno.js');
 const registerProfessor = require('./routes/registerProfessor.js');
 const id = require('./routes/id.js');
+const idEditAluno = require('./routes/idEditAluno.js')
+const deleteAluno = require('./routes/deleteAluno.js');
 const idRegisterComment = require('./routes/idRegisterComment.js');
 const notifications = require('./routes/notifications.js');
 const idEditCommentId = require('./routes/idEditCommentId.js');
 const idDeleteCommentId = require('./routes/idDeleteCommentId.js');
 const slug = require('./routes/slug.js');
 const logout = require('./routes/logout.js');
-const verifyLogin = require('./routes/verifyLogin.js');
+const verifyLoginProfessor = require('./routes/verifyLoginProfessor.js');
+const verifyLoginProfile = require('./routes/verifyLoginProfile.js');
 
 
 app.use('/auth', login);
@@ -126,9 +129,12 @@ app.use('/auth', chat);
 app.use('/auth', chatIncreaseLimit);
 app.use('/auth', mensagens);
 app.use('/auth', registerAluno);
-app.use('/auth', verifyLogin);
+app.use('/auth', verifyLoginProfessor);
+app.use('/auth', verifyLoginProfile);
 app.use('/auth', registerProfessor);
 app.use('/', id);
+app.use('/', idEditAluno);
+app.use('/', deleteAluno)
 app.use('/', idRegisterComment);
 app.use('/auth', notifications);
 app.use('/', idEditCommentId);
@@ -139,4 +145,4 @@ app.use('/auth', slug);
 
 http.listen(3000, ()=>{
   console.log('Servidor funcionando');
-}); 
+});

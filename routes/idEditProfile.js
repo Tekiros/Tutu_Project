@@ -1,31 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const verifyToken2 = require('./JS/verifyToken2.js');
 const verifyToken = require('./JS/verifyToken.js');
+const verifyTokenProfile = require('./JS/verifyTokenProfile.js');
 const Professor = require('../professorSchema.js');
-const e = require('connect-flash');
 
-router.get('/editProfile', verifyToken, async (req,res)=>{
-  token = req.cookies.token;
-
-  if(token){
-    Professor.findById(req.user.id, '-password').then((user)=>{
-      if(!user){
-        res.clearCookie('token');
-        res.clearCookie('tokenCreateProfessor');
-        res.redirect('/auth/login');
-      }else{
-        res.render('editProfile', {user:user})
-      }
-    }).catch(()=>{
-      req.flash('error', 'Erro ao buscar dados');
-      return res.redirect('/')
-    })
-  }
+router.get('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
+  Professor.findById(req.user.id, '-password').then((user)=>{
+    if(!user){
+      res.clearCookie('token');
+      res.clearCookie('tokenCreateProfessor');
+      res.redirect('/auth/login');
+    }else{
+      res.render('editProfile', {user:user})
+    }
+  }).catch(()=>{
+    req.flash('error', 'Erro ao buscar dados');
+    return res.redirect('/')
+  })
 });
 
-router.post('/editProfile', verifyToken, async (req,res)=>{
+router.post('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
   try{
     const {name, apelido, materia, email, password, confirmpassword} = req.body;
     const professor = await Professor.findById(req.user.id, '-password');
@@ -40,9 +35,10 @@ router.post('/editProfile', verifyToken, async (req,res)=>{
         return false;
       },
   
-      verifyEmail(){
+      verifyEmail(e){
         if(email !== professor.email){
           if(userExist){
+            e.preventDefault();
             req.flash('error', 'Esse e-mail já está em uso. ')
           }
         }

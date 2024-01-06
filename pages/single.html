@@ -13,9 +13,19 @@
     </div>
   <% } %>
 <div class="main-content">
-  <div class="content2">
-    <h2 style="text-align: center;">Nome: <%= alunoId.name %> <%= alunoId.surname %></h2>
-    <h3 style="text-align: center;">Código do aluno: <%= alunoId.id_aluno %></h3>
+  <div class="content2" style="overflow-x: hidden;">
+     <div class="panel">
+      <div class="opcoesComentarios">
+        <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
+        <div class="menu2">
+          <ul>
+            <li><i class="fas fa-angle-double-right"></i><a href="/<%= alunoId.id %>/editAluno/"> Editar perfil</a></li>
+          </ul>
+        </div>
+        </div>
+        <h2 style="text-align: center;">Nome: <%= alunoId.name %> <%= alunoId.surname %></h2>
+        <h3 style="text-align: center;">Código do aluno: <%= alunoId.id_aluno %></h3>
+     </div>
     <br>
     <div class="panel">
       <form action="/<%= alunoId._id %>/registerComment" method="post" class="add-comment">

@@ -40,11 +40,7 @@ router.post('/login', async (req,res)=>{
         return res.redirect('/auth/login');
     }
 
-    //const start = performance.now();
     const checkPassword = await bcrypt.compare(password, user.password);
-    //const end = performance.now();
-    //const verificationTime = end - start;
-    //console.log(`Tempo de verificação da senha: ${verificationTime} milissegundos`);
 
     if(!checkPassword){
         res.cookie('email', email);
@@ -54,12 +50,11 @@ router.post('/login', async (req,res)=>{
 
     try{
         const token = jwt.sign(
-        {
-            id:user._id,
-        },
+        {id:user._id}, 
         secret,
         {
-            expiresIn: '600s',
+            expiresIn: '600s', 
+            algorithm: 'HS256'
         }
         );
 

@@ -1,4 +1,5 @@
 <%- include('partials/header.html') %>
+
 <% if (flashMessages.error) { %>
     <div class="flash-message error-message error">
       <%= flashMessages.error %>
@@ -15,25 +16,22 @@
   
   <div class="center">
     <div class="panel2" style="margin: 0;">
-        <h1>Editar Perfil</h1>
+        <h1>Editar Perfil Do Aluno</h1>
         <br>
-        <form method="post" action="/auth/editProfile" class="add-comment">
-          <h2>Nome</h2><input type="text" name="name" value="<%= user.name %>">
-          <h2>Apelido</h2><input type="text" name="apelido" value="<%= user.apelido %>">
-          <h2>Materia</h2><input type="text" name="materia" value="<%= user.materia %>">
-          <h2>E-mail</h2><input required maxlength="200" type="email" name="email" value="<%= user.email %>">
-          <h2>Senha</h2><input maxlength="50" type="password" name="password">
-          <h2>Confirme sua senha</h2><input maxlength="50" type="password" name="confirmpassword">
+        <form method="post" action="/<%= aluno.id %>/editAluno/" class="add-comment">
+          <h2>Nome</h2><input type="text" name="name" value="<%= aluno.name %>">
+          <h2>Sobrenome</h2><input type="text" name="surname" value="<%= aluno.surname %>">
+          <h2>Identificador aluno</h2><input type="text" name="id_aluno" value="<%= aluno.id_aluno %>">
           <br><br>
           <button style="margin: 0 auto;">Confirmar</button>
         </form>
         <br><br><br>
         <button class="deleteProfileBtn">Excluir Cadastro</button>
-        <form action="/auth/delete/professor/<%= user.id %>" class="add-comment">
+        <form action="/<%= aluno.id %>/deleteAluno/" class="add-comment">
           <div id="myModal" class="modal">
             <div class="modal-content">
               <span class="closeModal">❌</span>
-              <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir sua conta?</p>
+              <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza de que deseja excluir esse aluno?</p>
               <br><br>
               <div class="buttons">
                 <button id="confirmBtn">Confirmar</button>
@@ -71,4 +69,5 @@
     }
   });
 </script>
+
 <%- include('partials/footer.html') %>

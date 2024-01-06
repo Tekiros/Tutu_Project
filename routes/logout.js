@@ -7,6 +7,7 @@ const BlacklistToken = require('../blacklistTokenSchema.js');
 
 router.get('/logout', verifyToken, async (req,res)=>{
   token = req.cookies.token;
+  tokenCreateProfessor = req.cookies.tokenCreateProfessor;
 
   try{
     const existingToken = await BlacklistToken.findOne({token: token});
@@ -14,7 +15,7 @@ router.get('/logout', verifyToken, async (req,res)=>{
       req.flash('error', 'Token Inválido');
     }
 
-    const blacklistToken = new BlacklistToken({token:token});
+    const blacklistToken = new BlacklistToken({token:token, tokenCreateProfessor:tokenCreateProfessor});
     await blacklistToken.save();
 
 

@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const Professor = require('../professorSchema.js');
+const verifyToken = require('./JS/verifyToken.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const secret = process.env.SECRET;
 
-router.get('/verifyLogin', (req,res)=>{
+
+router.get('/verifyLoginProfessor', verifyToken, (req,res)=>{
     res.render('verifyLogin');
 });
   
-router.post('/verifyLogin', async (req,res)=>{
+router.post('/verifyLoginProfessor', verifyToken, async (req,res)=>{
     const {email, password} = req.body;
 
     const maxEmailLength = 200;
@@ -17,27 +19,27 @@ router.post('/verifyLogin', async (req,res)=>{
 
     if(!email){
         req.flash('error', 'Você precisa digitar seu e-mail!');
-        return res.redirect('/auth/verifyLogin');
+        return res.redirect('/auth/verifyLoginProfessor');
     }
 
     if(email.length > maxEmailLength){
-        return res.redirect('/auth/verifyLogin');
+        return res.redirect('/auth/verifyLoginProfessor');
     }
 
     if(!password){
         req.flash('error', 'Você precisa digitar sua senha!');
-        return res.redirect('/auth/verifyLogin');
+        return res.redirect('/auth/verifyLoginProfessor');
     }
 
     if(password.length > maxPasswordLength){
-        return res.redirect('/auth/verifyLogin');
+        return res.redirect('/auth/verifyLoginProfessor');
     }
 
     let user = await Professor.findOne({email:email});
 
     if(!user){
         req.flash('error', 'Credenciais inválidas!');
-        return res.redirect('/auth/verifyLogin');
+        return res.redirect('/auth/verifyLoginProfessor');
     }
 
     //const start = performance.now();
@@ -49,7 +51,7 @@ router.post('/verifyLogin', async (req,res)=>{
 
     if(!checkPassword){
         req.flash('error', 'Credenciais inválidas');
-        return res.redirect('/auth/verifyLogin');
+        return res.redirect('/auth/verifyLoginProfessor');
     }
     try{
         const tokenCreateProfessor = jwt.sign(
@@ -64,7 +66,10 @@ router.post('/verifyLogin', async (req,res)=>{
         
         res.cookie('tokenCreateProfessor', tokenCreateProfessor, {httpOnly:true, maxAge:120000});
         //secure:true, sameSite:'Strict'
-        res.redirect('/auth/registerProfessor');
+        // return res.redirect('/'); //Redirecionamento para home
+        return res.redirect('/auth/registerProfessor');
+        // return res.redirect('/${id}/editAluno');
+
     }catch(err){
         req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');
         return res.redirect('/');

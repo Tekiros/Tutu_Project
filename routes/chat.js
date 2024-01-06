@@ -6,9 +6,6 @@ const HistoricoChat = require('../historicoChat.js');
 
 
 router.get('/chat', verifyToken, async (req,res)=>{
-  token = req.cookies.token;
-
-  if(token){
     try{
       const messageLimit = req.session.messageLimit || 8;
 
@@ -32,7 +29,6 @@ router.get('/chat', verifyToken, async (req,res)=>{
     } catch (err) {
       console.log(err);
     }
-  }
 });
 
 module.exports = router;

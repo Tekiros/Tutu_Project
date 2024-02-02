@@ -8,7 +8,7 @@ const commentSchema = new mongoose.Schema({
   createdAt: {type: Date, default: Date.now},
 });
 
-commentSchema.methods.getFormattedDate = function() {
+commentSchema.methods.getFormattedDate = function(){
   return this.createdAt.toLocaleString('pt-BR');
 };
 

@@ -20,10 +20,18 @@
         <form method="post" action="/auth/editProfile" class="add-comment">
           <h2>Nome</h2><input type="text" name="name" value="<%= user.name %>">
           <h2>Apelido</h2><input type="text" name="apelido" value="<%= user.apelido %>">
-          <h2>Materia</h2><input type="text" name="materia" value="<%= user.materia %>">
+          <br>
+          <label>Perfil para secretaria</label>
+          <br>
+          <label>Sim</label>
+          <input type="checkbox" id="perfilSecretariaSim" name="boxPerfilSecretaria" onchange="perfilSecretariaSimBox()">
+          <label for="perfilSecretariaNao"> Não</label>
+          <input type="checkbox" id="perfilSecretariaNao" checked onchange="perfilSecretariaNaoBox()">
+          <br>
+          <h2 id="h2InputMateria">Materia</h2><input id="inputMateria" type="text" name="materia" value="<%= user.materia %>">
           <h2>E-mail</h2><input required maxlength="200" type="email" name="email" value="<%= user.email %>">
-          <h2>Senha</h2><input maxlength="50" type="password" name="password">
-          <h2>Confirme sua senha</h2><input maxlength="50" type="password" name="confirmpassword">
+          <h2>Nova Senha</h2><input maxlength="50" type="password" name="password">
+          <h2>Confirme sua nova senha</h2><input maxlength="50" type="password" name="confirmpassword">
           <br><br>
           <button style="margin: 0 auto;">Confirmar</button>
         </form>
@@ -70,5 +78,32 @@
       modal.style.display = "none";
     }
   });
+
+  ////////////////////////////////////
+
+  const perfilSecretariaSim = document.getElementById('perfilSecretariaSim');
+  const perfilSecretariaNao = document.getElementById('perfilSecretariaNao');
+  const inputMateria = document.getElementById('inputMateria');
+  const h2InputMateria = document.getElementById('h2InputMateria');
+  const perfilSercretaria = '<%= user.perfilSecretaria %>';
+
+
+  function teste22(){
+    if(perfilSercretaria == 'true'){
+      perfilSecretariaSim.checked = true;
+      perfilSecretariaNao.checked = false;
+      perfilSecretariaNao.disabled = true;
+      perfilSecretariaSim.disabled = true;
+      inputMateria.disabled = true;
+      h2InputMateria.style.display = 'none';
+      inputMateria.style.display = 'none';
+      var br = document.createElement('br');
+      h2InputMateria.parentNode.insertBefore(br, h2InputMateria);
+    }else{
+      perfilSecretariaSim.disabled = true;
+      perfilSecretariaNao.disabled = true;
+    }
+  }
+  teste22()
 </script>
 <%- include('partials/footer.html') %>

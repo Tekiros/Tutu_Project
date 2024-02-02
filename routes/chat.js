@@ -18,6 +18,8 @@ router.get('/chat', verifyToken, async (req,res)=>{
       
       Professor.findById(req.user.id, '-password').then((user)=>{
         if(!user){
+          res.clearCookie('_mmsa_prod_intercome');
+          res.clearCookie('cSIDCC');
           res.redirect('/auth/login');
         }else{
           res.render('chat', {user:user, mensagem:dadosMensagem});

@@ -65,7 +65,7 @@ router.post('/:id/registerComment', verifyToken, async (req,res, e)=>{
     await notification.save();
 
     req.flash('success', 'Comentário criado com sucesso.');
-    res.redirect(`/${id}`);
+    return res.redirect(`/${id}`);
   } catch(error){
     req.flash('error', 'Erro ao adicionar comentário');
     console.log(error);

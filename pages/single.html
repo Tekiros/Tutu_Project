@@ -12,6 +12,19 @@
       <button class="close-btn" onclick="closeFlash(this)">❌</button>
     </div>
   <% } %>
+  <script>
+    function teste(){
+      let opcoesComentarios = document.querySelectorAll('.opcoesComentarios');
+    
+
+      if(user.name = comment.author){
+        console.log('temos')
+      }else{
+        console.log('nao temmso')
+      }
+    }
+    teste()
+  </script>
 <div class="main-content">
   <div class="content2" style="overflow-x: hidden;">
      <div class="panel">
@@ -19,7 +32,7 @@
         <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
         <div class="menu2">
           <ul>
-            <li><i class="fas fa-angle-double-right"></i><a href="/<%= alunoId.id %>/editAluno/"> Editar perfil</a></li>
+            <li><i class="fas fa-angle-double-right"></i><a href="/<%= alunoId.id %>/editAluno"> Editar perfil</a></li>
           </ul>
         </div>
         </div>

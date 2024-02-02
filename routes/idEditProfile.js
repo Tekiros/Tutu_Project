@@ -8,7 +8,7 @@ const Professor = require('../professorSchema.js');
 router.get('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
   Professor.findById(req.user.id, '-password').then((user)=>{
     if(!user){
-      res.clearCookie('token');
+      res.clearCookie('cSIDCC');
       res.clearCookie('tokenCreateProfessor');
       res.redirect('/auth/login');
     }else{

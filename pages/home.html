@@ -43,6 +43,19 @@
 				<h2>Busque um aluno! <i class="fas fa-angle-double-right"></i></h2>
 				<form><input class="placeholder-colorHome" style="width: 300px; text-align: center;margin: 1% 5%; padding: 5%; border: 3px solid #6D3BB8; border-radius: 30px;" type="text" name="busca" placeholder="Digite o nome do aluno"/></form>
 			</div>
+			<div class="panel avisos">
+				<h2 style="margin-bottom: 2.5%;">Avisos <button class="more" style="float: right; width:150px; font-size:18px; height: 35px;"><a href="/auth/addAviso">Adcionar aviso</a></button></h2>
+				<div class="flex33">
+				<% aviso.forEach((aviso)=>{ %>
+						<div class="panel aviso avisoVerify" style="margin: 10px 1px 10px 0">
+							<button type="submit" class="btnCloseAviso" id="avisoClosed" style="float: right;"><a href="/auth/aviso/<%= aviso._id %>/delete">❌</a></button>
+							<p><%= aviso.text %></p>
+							<br>
+							<p><%= aviso.author %> - <%= aviso.getFormattedDate() %></p>
+						</div>
+				<% }) %>
+			</div>
+			</div>
 			<div class="panel">
 				<div id="chat">
 					<ul id="messages">
@@ -52,7 +65,7 @@
 						<% mensagem.forEach((mensagem)=>{ %>
 							<li class="mensagemSingle"><p style="font-weight: 600;color: black;"><%= mensagem.professor %> </p><br><p style="color: black;"><%= mensagem.mensagem %></p></li>
 						<% }); %>
-					  </ul>
+						</ul>
 				</div>
 			</div>
 		</div>
@@ -89,6 +102,37 @@
 		  }
 		});
 	  })();
+		/////////////////////////////////////////////////////////////////////
+
+		const aviso = document.querySelector('.avisoVerify')
+		const avisos = document.querySelector('.avisos');
+
+		function verifyAviso() {
+			if(!aviso){
+				var divH2 = document.createElement('div');
+				var h2 = document.createElement('h2');
+				h2.style.textAlign = 'center';
+				h2.style.marginTop = '2%'
+				h2.textContent = 'Não há nenhum aviso!';
+				divH2.appendChild(h2);
+				avisos.appendChild(divH2);
+			}
+		}
+		verifyAviso()
+
+		/////////////////////////////////////////////////////////////////////
+
+		const perfilSecretaraia = '<%= user.perfilSecretaria %>';
+		const more = document.querySelector('.more');
+		const avisoClosed = document.querySelectorAll('.btnCloseAviso');
+
+		function verifyPerfilSecretaria(){
+			if(perfilSecretaraia === 'false'){
+				more.style.display = 'none';
+				avisoClosed.forEach(e =>{e.style.display = 'none';});
+			}
+		}
+		verifyPerfilSecretaria()
 	</script>
 	<script src="home.js"></script>
 <%- include('partials/footer.html') %>

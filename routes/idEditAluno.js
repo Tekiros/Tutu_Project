@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('./JS/verifyToken.js');
-const verifyToken2 = require('./JS/verifyTokenProfessor.js');
+const verifyToken2 = require('./JS/verifyTokenEditProfile.js');
 const Aluno = require('../alunosSchema.js');
 
 
@@ -18,7 +18,6 @@ router.post('/:id/editAluno', verifyToken, verifyToken2, async (req,res)=>{
   const aluno = await Aluno.findById(id);
 
   try{
-
     if(name == ''){
       req.flash('error', 'Você precisa preencher o campo "Nome".');
       return res.redirect(`/${id}/editAluno`);

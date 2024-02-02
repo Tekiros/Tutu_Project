@@ -6,13 +6,14 @@ const verifyTokenProfessor = require('./JS/verifyTokenProfessor.js');
 const Professor = require('../professorSchema.js');
 
 
-router.get('/registerProfessor', verifyToken, verifyTokenProfessor, async (req,res)=>{
+router.get('/registerProfessor', verifyToken, verifyTokenProfessor,  async (req,res)=>{
   res.render('registerProfessor')
 });
   
 router.post('/registerProfessor', verifyToken, verifyTokenProfessor, async (req,res)=>{
-  const {name, apelido, materia, email, password, confirmpassword} = req.body;
+  const {name, apelido, boxPerfilSecretaria, materia, email, password, confirmpassword} = req.body;
   const userExist = await Professor.findOne({email:email});
+  const perfilSecretaria = boxPerfilSecretaria && boxPerfilSecretaria.toLowerCase() === 'on';
 
   const maxEmailLength = 200;
   const maxPasswordLength = 50;
@@ -28,7 +29,8 @@ router.post('/registerProfessor', verifyToken, verifyTokenProfessor, async (req,
     return res.redirect('/auth/registerProfessor');
   }
 
-  if(materia == ''){
+  if(perfilSecretaria){
+  }else if(materia == ''){
     req.flash('error', 'Você precisa preencher o campo "Matéria Lecionada".');
     return res.redirect('/auth/registerProfessor');
   }
@@ -74,6 +76,7 @@ router.post('/registerProfessor', verifyToken, verifyTokenProfessor, async (req,
     name,
     apelido,
     email,
+    perfilSecretaria,
     materia,
     password: passwordHash
   });
@@ -81,7 +84,6 @@ router.post('/registerProfessor', verifyToken, verifyTokenProfessor, async (req,
   try{
    if(verifyTokenProfessor){
     await user.save();
-
     req.flash('success', 'Professor(a) cadastrado com sucesso');
     return res.redirect('/auth/registerProfessor');
    }else(
@@ -89,7 +91,8 @@ router.post('/registerProfessor', verifyToken, verifyTokenProfessor, async (req,
    )
     
   }catch(err){
-    req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde // Esse professor(a) já pode estar cadastrado');
+    console.log(err)
+    req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde || Esse professor(a) já pode estar cadastrado || '+err);
     return res.redirect('/auth/registerProfessor');
   }
 });

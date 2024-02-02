@@ -1,0 +1,52 @@
+<%- include('partials/header.html') %>
+  <% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+<div class="main-content">
+  <div class="content1" style="width: 100%;">
+    <div class="center">
+      <div class="panel2" style="width: 60%;">
+          <h1>Novo Aviso</h1>
+          <br>
+          <form action="/auth/addAviso" method="post">
+            <h3>Insira seu aviso</h3>
+            <br>
+            <textarea maxlength="150" minlength="10" id="textAviso" name="textAviso" placeholder="Insira seu aviso aqui ..." rows="10"></textarea>
+            <br>
+            <br>
+            <button class="more" id="addComent">Adicionar Aviso</button>
+          </form>
+      </div>
+  </div>
+  
+    <div class="panel avisos">
+      <h2 style="text-align: center;">Avisos ativos</h2>
+        <div class="flex33">
+          <% aviso.forEach((aviso)=>{ %>
+            <div class="panel aviso" style="margin: 10px 2px 10px;">
+              <button type="submit" id="avisoClosed" style="float: right;"><a href="/auth/aviso/<%= aviso._id %>/delete">❌</a></button>
+              <p><%= aviso.text %></p>
+              <br>
+              <p><%= aviso.author %> - <%= aviso.getFormattedDate() %></p>
+            </div>
+          <% }); %>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>
+
+<%- include('partials/footer.html') %>

@@ -52,15 +52,12 @@ router.post('/login', async (req,res)=>{
         const token = jwt.sign(
         {id:user._id}, 
         secret,
-        {
-            expiresIn: '600s', 
-            algorithm: 'HS256'
-        }
+        {algorithm: 'HS256'}
         );
 
         res.clearCookie('email');
-        res.cookie('token', token, {httpOnly:true, maxAge:600000});
-        //secure:true, sameSite:'Strict'
+        res.cookie('cSIDCC', token, {httpOnly:true, maxAge:600000});
+        //secure:true, sameSite:'Strict' maxAge:600000
         res.redirect('/');
     }catch(err){
         req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');

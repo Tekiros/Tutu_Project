@@ -42,12 +42,7 @@ router.post('/verifyLoginProfessor', verifyToken, async (req,res)=>{
         return res.redirect('/auth/verifyLoginProfessor');
     }
 
-    //const start = performance.now();
     const checkPassword = await bcrypt.compare(password, user.password);
-    //const end = performance.now();
-    //const verificationTime = end - start;
-    //console.log(`Tempo de verificação da senha: ${verificationTime} milissegundos`);
-    
 
     if(!checkPassword){
         req.flash('error', 'Credenciais inválidas');
@@ -64,11 +59,9 @@ router.post('/verifyLoginProfessor', verifyToken, async (req,res)=>{
         }
         );
         
-        res.cookie('tokenCreateProfessor', tokenCreateProfessor, {httpOnly:true, maxAge:120000});
+        res.cookie('_mmsa_prod_intercome', tokenCreateProfessor, {httpOnly:true, maxAge:120000});
         //secure:true, sameSite:'Strict'
-        // return res.redirect('/'); //Redirecionamento para home
         return res.redirect('/auth/registerProfessor');
-        // return res.redirect('/${id}/editAluno');
 
     }catch(err){
         req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');

@@ -6,7 +6,6 @@ const HistoricoChat = require('../historicoChat.js');
 
 
 router.get('/mensagens', verifyToken, async (req,res)=>{
-  token = req.cookies.token;
   const historicomensagens = await HistoricoChat.find();
 
   try{

@@ -12,30 +12,59 @@
       <button class="close-btn" onclick="closeFlash(this)">❌</button>
     </div>
   <% } %>
-  
-    <div class="center">
-        <div class="panel2">
-            <h1>Cadastrar Professor(a)</h1>
-            <br>
-            <form method="post">
-                <input type="text" name="name" placeholder="Nome completo">
-                <br>
-                <input type="text" name="apelido" placeholder="Apelido ou primeiro nome">
-                <br>
-                <input type="text" name="materia" placeholder="Matéria Lecionada">
-                <br>
-                <input type="email" name="email" placeholder="E-mail">
-                <br>
-                <input id="passwordRegiter" type="password" name="password" placeholder="Sua Senha">
-                <div class="passwordRegiter">
-                  <p>As senhas devem ter pelo menos 6 caracteres.</p>
-                </div>
-                <br>
-                <input type="password" name="confirmpassword" placeholder="Confirme sua senha">
-                <br>
-                <input type="submit" name="acao" value="Cadastrar">
-            </form>
-        </div>
-    </div>
-    <script src="../../public/registerProfessor.js"></script>
+
+  <div class="center">
+      <div class="panel2">
+          <h1>Cadastrar Professor(a)</h1>
+          <br>
+          <form method="post">
+              <input type="text" name="name" placeholder="Nome completo">
+              <br>
+              <input type="text" name="apelido" placeholder="Apelido ou primeiro nome">
+              <br>
+              <label for="">Perfil para secretaria?</label>
+              <br>
+              <label for="perfilSecretariaSim">Sim</label>
+              <input type="checkbox" id="perfilSecretariaSim" name="boxPerfilSecretaria" onchange="perfilSecretariaSimBox()">
+              <label for="perfilSecretariaNao"> Não</label>
+              <input type="checkbox" id="perfilSecretariaNao" checked onchange="perfilSecretariaNaoBox()">
+              <br>
+              <input id="inputMateria" type="text" name="materia" placeholder="Matéria Lecionada">
+              <br>
+              <input type="email" name="email" placeholder="E-mail">
+              <br>
+              <input id="passwordRegiter" type="password" name="password" placeholder="Sua Senha">
+              <div class="passwordRegiter">
+                <p>As senhas devem ter pelo menos 6 caracteres.</p>
+              </div>
+              <br>
+              <input type="password" name="confirmpassword" placeholder="Confirme sua senha">
+              <br>
+              <input type="submit" name="acao" value="Cadastrar">
+          </form>
+      </div>
+  </div>
+  <script>
+    const perfilSecretariaSim = document.getElementById('perfilSecretariaSim');
+    const perfilSecretariaNao = document.getElementById('perfilSecretariaNao');
+    const inputMateria = document.getElementById('inputMateria');
+
+    function perfilSecretariaSimBox() {
+      if(perfilSecretariaSim.checked) {
+        perfilSecretariaNao.disabled;
+        perfilSecretariaNao.checked = false;
+        inputMateria.disabled = true;
+      }else{
+        perfilSecretariaNao.checked = true;
+        inputMateria.disabled = false;
+      }
+    }
+    function perfilSecretariaNaoBox() {
+      if(perfilSecretariaNao.checked) {
+        perfilSecretariaSim.checked = false;
+        inputMateria.disabled = false;
+      }
+    }
+  </script>
+  <script src="../../public/registerProfessor.js"></script>
 <%- include('partials/footer.html') %>

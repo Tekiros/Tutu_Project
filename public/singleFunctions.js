@@ -86,6 +86,7 @@ const optionsComments = {
 }
 
 opcoesComentarios.forEach((opcaoComentario)=>{opcaoComentario.addEventListener('click', optionsComments.openMenu2)});
+
 ////////////////////////////////////////////////////////////////
 
 const divsComentarioUnico = Array.from(document.querySelectorAll('.comentarioUnico'));

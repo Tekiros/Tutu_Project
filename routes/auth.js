@@ -4,38 +4,45 @@ const verifyToken = require('./JS/verifyToken.js');
 const Professor = require('../professorSchema.js');
 const Aluno = require('../alunosSchema.js');
 const HistoricoChat = require('../historicoChat.js');
+const Avisos = require('../avisosSchema.js');
 
 
 router.get('/', verifyToken, async (req,res)=>{
     if(req.query.busca == null){
-      token = req.cookies.token;
-  
-      if(token){
-        try{
-          var historicomensagens = (await HistoricoChat.find().sort({createdAt: -1}).limit(5)).reverse();
-          var dadosMensagem = historicomensagens.map(historicoMensagem =>({
-              professor: historicoMensagem.professor,
-              mensagem: historicoMensagem.mensagem,
-          }));
-  
-          ////////////////////////////////////////////////////////
-  
-          Professor.findById(req.user.id, '-password').then((user)=>{
-            if(!user){
-              res.clearCookie('token');
-              res.clearCookie('tokenCreateProfessor');
-              res.redirect('/auth/login');
-            }else{
-              res.render('home',{user:user, mensagem:dadosMensagem});
-            }
-          }).catch(()=>{
-            req.flash('error', 'Erro ao buscar dados');
-            return res.redirect('/auth/login');
+      try{
+        const historicomensagens = (await HistoricoChat.find().sort({createdAt: -1}).limit(5)).reverse();
+        const dadosMensagem = historicomensagens.map(historicoMensagem =>({
+            professor: historicoMensagem.professor,
+            mensagem: historicoMensagem.mensagem,
+        }));
+        ////////////////////////////////////////////////////////
+        const avisos = (await Avisos.find()).reverse();
+        const aviso = avisos.map(dadosAvisos =>{
+          const avisoInstance = new Avisos({
+            _id: dadosAvisos._id,
+            text: dadosAvisos.text,
+            author: dadosAvisos.author,
+            createdAt: dadosAvisos.createdAt,
           });
-        }catch(err){
-          console.log(err);
-        } 
-      }
+          return avisoInstance
+        })
+        ////////////////////////////////////////////////////////
+
+        Professor.findById(req.user.id, '-password').then((user)=>{
+          if(!user){
+            res.clearCookie('cSIDCC');
+            res.clearCookie('_mmsa_prod_intercome');
+            res.redirect('/auth/login');
+          }else{
+            res.render('home',{user:user, mensagem:dadosMensagem, aviso:aviso});
+          }
+        }).catch(()=>{
+          req.flash('error', 'Erro ao buscar dados');
+          return res.redirect('/auth/login');
+        });
+      }catch(err){
+        console.log(err);
+      } 
     }else{
       try{
         const regex = new RegExp(req.query.busca, 'i');

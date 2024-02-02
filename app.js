@@ -115,14 +115,20 @@ const idRegisterComment = require('./routes/idRegisterComment.js');
 const notifications = require('./routes/notifications.js');
 const idEditCommentId = require('./routes/idEditCommentId.js');
 const idDeleteCommentId = require('./routes/idDeleteCommentId.js');
+const addAviso = require('./routes/addAviso.js');
+const deleteAviso = require('./routes/deleteAviso.js');
 const slug = require('./routes/slug.js');
 const logout = require('./routes/logout.js');
 const verifyLoginProfessor = require('./routes/verifyLoginProfessor.js');
 const verifyLoginProfile = require('./routes/verifyLoginProfile.js');
+const verifyLoginEditProfile = require('./routes/verifyLoginEditProfile.js')
+
 
 
 app.use('/auth', login);
 app.use('/', auth);
+app.use('/auth', addAviso);
+app.use('/auth', deleteAviso);
 app.use('/auth', editProfile);
 app.use('/auth', deleteProfile);
 app.use('/auth', chat);
@@ -133,6 +139,7 @@ app.use('/auth', verifyLoginProfessor);
 app.use('/auth', verifyLoginProfile);
 app.use('/auth', registerProfessor);
 app.use('/', id);
+app.use('/:id/editAluno', verifyLoginEditProfile);
 app.use('/', idEditAluno);
 app.use('/', deleteAluno)
 app.use('/', idRegisterComment);

@@ -15,9 +15,9 @@ jobs:
     - name: Copy files with SSH
       uses: easingthemes/ssh-deploy@main
       env:
-        SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
+        SSH_PRIVATE_KEY: "/workflows/tutu.pem"
         ARGS: "-rltgoDzvO --delete"
-        SOURCE: "./"
+        SOURCE: "/var/tutu"
         REMOTE_HOST: "ec2-3-17-153-92.us-east-2.compute.amazonaws.com"
         REMOTE_USER: "ec2-user"
         TARGET: "/var/tutu"

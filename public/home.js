@@ -57,9 +57,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
       console.error('Erro ao buscar notificações:', error);
     }
   }
-  
   setInterval(atualizarNotificacoes, 60000);
 
+/////////////////////////////////////////////////////////////////////
+
+  const aviso = document.querySelector('.avisoVerify')
+  const titleH2 = document.getElementById('h2AviSo');
+
+  function verifyAviso() {
+    if(!aviso){
+      titleH2.innerHTML = 'Não temos nenhum aviso para hoje 😁';
+      titleH2.style.marginBottom = '0';
+    }
+  }
+  verifyAviso()
   atualizarNotificacoes();
 });
 
@@ -83,3 +94,6 @@ if (event.target === modal){
   modal.style.display = "none";
 }
 });
+
+/////////////////////////////////////////////////////////////////////
+

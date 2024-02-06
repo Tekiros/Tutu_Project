@@ -19,7 +19,8 @@
           <h1>Novo Aviso</h1>
           <br>
           <form action="/auth/addAviso" method="post">
-            <h3>Insira seu aviso</h3>
+            <h3>Insira seu aviso </h3>
+            <p style="float: right;">( Novos avisos expiram em 10 dias )</p>
             <br>
             <textarea maxlength="150" minlength="10" id="textAviso" name="textAviso" placeholder="Insira seu aviso aqui ..." rows="10"></textarea>
             <br>
@@ -29,24 +30,33 @@
       </div>
   </div>
   
-    <div class="panel avisos">
-      <h2 style="text-align: center;">Avisos ativos</h2>
-        <div class="flex33">
-          <% aviso.forEach((aviso)=>{ %>
-            <div class="panel aviso" style="margin: 10px 2px 10px;">
-              <button type="submit" id="avisoClosed" style="float: right;"><a href="/auth/aviso/<%= aviso._id %>/delete">❌</a></button>
-              <p><%= aviso.text %></p>
-              <br>
-              <p><%= aviso.author %> - <%= aviso.getFormattedDate() %></p>
-            </div>
-          <% }); %>
+  <div class="panel avisos">
+    <h2 style="margin-bottom: 2.5%; text-align: center;">Avisos </h2>
+    <div class="flex33">
+    <% aviso.forEach((aviso)=>{ %>
+        <div class="panel aviso avisoVerify" style="margin: 10px 1px 10px 0">
+          <button type="submit" class="btnCloseAviso" id="avisoClosed" style="float: right;"><a href="/auth/aviso/<%= aviso._id %>/delete">❌</a></button>
+          <p><%= aviso.text %></p>
+          <br>
+          <p><%= aviso.author %> - <%= aviso.getFormattedDate() %></p>
         </div>
-    </div>
+    <% }) %>
+  </div>
+  </div>
   </div>
 </div>
 
 <script>
+  const aviso = document.querySelector('.avisoVerify');
+  const avisos = document.querySelector('.avisos');
+  const titleH2 = document.getElementById('h2AviSo');
 
+  function verifyAviso() {
+    if(!aviso){
+    avisos.style.display = 'none'
+  }
+  }
+  verifyAviso()
 </script>
 
 <%- include('partials/footer.html') %>

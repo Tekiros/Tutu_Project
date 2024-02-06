@@ -12,19 +12,7 @@
       <button class="close-btn" onclick="closeFlash(this)">❌</button>
     </div>
   <% } %>
-  <script>
-    function teste(){
-      let opcoesComentarios = document.querySelectorAll('.opcoesComentarios');
-    
 
-      if(user.name = comment.author){
-        console.log('temos')
-      }else{
-        console.log('nao temmso')
-      }
-    }
-    teste()
-  </script>
 <div class="main-content">
   <div class="content2" style="overflow-x: hidden;">
      <div class="panel">
@@ -69,21 +57,23 @@
     <div class="panel">
       <h2 id="topComentarios" style="text-align: center;">Comentários</h2>
         <ul>
-          <% 
-          const reversedComments = alunoId.comments.slice().reverse();
-
-          reversedComments.forEach((comment, index) => { %>
-          <div class="panel comentarioUnico">
-          <li style="color: #787171;" id="commentDefault<%= comment._id %>">
-          <div class="opcoesComentarios">
-            <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
-            <div class="menu2">
-              <ul>
-                <li><i class="fas fa-angle-double-right"></i><a onclick="optionsComments.toggleEditForm('<%= comment._id %>')"> Editar Comentário</a></li>
-                <li><i class="fas fa-angle-double-right"></i><a onclick="optionsComments.toggleDeleteComment('<%= comment._id %>')" > Excluir Comentário</a></li>
-              </ul>
-            </div>
-            </div>
+          <% const reversedComments = alunoId.comments.slice().reverse(); %>
+          <% const currentUser = user.name; %>
+          
+          <% reversedComments.forEach((comment, index) => { %>
+            <div class="panel comentarioUnico">
+              <li style="color: #787171;" id="commentDefault<%= comment._id %>">
+                <div class="opcoesComentarios">
+                  <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
+                  <div class="menu2">
+                    <ul>
+                      <% if (comment.author === currentUser) { %>
+                        <li><i class="fas fa-angle-double-right"></i><a onclick="optionsComments.toggleEditForm('<%= comment._id %>')"> Editar Comentário</a></li>
+                        <li><i class="fas fa-angle-double-right"></i><a onclick="optionsComments.toggleDeleteComment('<%= comment._id %>')" > Excluir Comentário</a></li>
+                      <% } %>
+                    </ul>
+                  </div>
+                </div>
               Comentário - <%= reversedComments.length - index %>:
               <br>
               <br>
@@ -115,16 +105,17 @@
     </div>
 
     <div class="pagination panel">
-      <div class="first">&#171</div>
-      <div class="prev">&lt</div>
+      <div class="first">&lt;&lt;</div>
+      <div class="prev">&lt;</div>
       <div class="numbers">
         <div>1</div>
       </div>
-      <div class="next">&gt</div>
-      <div class="last">&#187</div>
+      <div class="next">&gt;</div>
+      <div class="last">&gt;&gt;</div>
     </div>
   </div>
 </div>
 
 <script src="singleFunctions.js"></script>
+
 <%- include('partials/footer.html') %>

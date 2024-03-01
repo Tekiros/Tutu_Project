@@ -8,7 +8,7 @@ async function verifyPerfilSecretaria (req,res,next){
       return res.redirect('/');
     }
   }).catch(()=>{
-    req.flash('error', 'Erro ao buscar dados ADDAVISO');
+    req.flash('error', 'Erro ao buscar dados');
     return res.redirect('/');
   });
 }

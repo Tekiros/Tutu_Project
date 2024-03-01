@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const secret = process.env.SECRET;
 
-router.get('/login', (req,res)=>{
+router.get('/login', async (req,res)=>{
     res.render('login');
 });
   
@@ -45,6 +45,11 @@ router.post('/login', async (req,res)=>{
     if(!checkPassword){
         res.cookie('email', email);
         req.flash('error', 'Credenciais inválidas');
+        return res.redirect('/auth/login');
+    }
+
+    if(!user.status){
+        req.flash('error', 'Esse perfil esta temporariamente suspenso, entre em contato com secretaria para mais informações.');
         return res.redirect('/auth/login');
     }
 

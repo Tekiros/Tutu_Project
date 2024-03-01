@@ -55,11 +55,11 @@ router.post('/verifyLoginProfile', verifyToken, async (req,res)=>{
         },
         secret,
         {
-            expiresIn: '120s',
+            expiresIn: '300s',
         }
         );
         
-        res.cookie('_mmsa_prod_intercome', tokenCreateProfessor, {httpOnly:true, maxAge:120000});
+        res.cookie('_mmsa_prod_intercome', tokenCreateProfessor, {httpOnly:true, maxAge:300000});
         //secure:true, sameSite:'Strict'
         return res.redirect('/auth/editProfile');
 

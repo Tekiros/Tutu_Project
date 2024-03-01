@@ -18,6 +18,7 @@ const alunoSchema = new mongoose.Schema({
   surname: {type:String, required:true},
   id_aluno: {type:String, required:true, unique:true},
   comments: [commentSchema], 
+  status: {type: Boolean, default: true},
 });
 
 var Aluno = mongoose.model('Aluno', alunoSchema);

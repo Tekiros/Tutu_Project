@@ -108,15 +108,17 @@
 
 		const perfilSecretaraia = '<%= user.perfilSecretaria %>';
 		const more = document.querySelector('.more');
+		const gerenciadorUsuariosMenu = document.querySelector('.gerenciadorUsuariosMenu');
 		const avisoClosed = document.querySelectorAll('.btnCloseAviso');
 
 		function verifyPerfilSecretaria(){
 			if(perfilSecretaraia === 'false'){
+				gerenciadorUsuariosMenu.style.display = 'none';
 				more.style.display = 'none';
 				avisoClosed.forEach(e =>{e.style.display = 'none';});
 			}
 		}
 		verifyPerfilSecretaria()
 	</script>
-	<script src="home.js"></script>
+	<script src="../public/home.js"></script>
 <%- include('partials/footer.html') %>

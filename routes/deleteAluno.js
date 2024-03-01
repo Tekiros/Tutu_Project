@@ -10,7 +10,7 @@ router.get('/:id/deleteAluno', verifyToken, verifyToken2, async (req,res)=>{
     await Aluno.findByIdAndDelete(alunoId);
 
     req.flash('success', 'Aluno(a) excluído com sucesso.');
-    return res.redirect('/?busca=')
+    return res.redirect('/auth/gerenciadorUsuarios')
   }catch(error){
     console.error(error);
     req.flash('error', 'Ocorreu um erro ao excluir o aluno.');

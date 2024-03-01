@@ -122,6 +122,10 @@ const logout = require('./routes/logout.js');
 const verifyLoginProfessor = require('./routes/verifyLoginProfessor.js');
 const verifyLoginProfile = require('./routes/verifyLoginProfile.js');
 const verifyLoginEditProfile = require('./routes/verifyLoginEditProfile.js')
+const gerenciadorUsuarios = require('./routes/gerenciadorUsuarios.js');
+const changeStatusProfessor = require('./routes/changeStatusProfile.js');
+const changeStatusAluno = require('./routes/changeStatusAluno.js');
+const verifyLoginGerenciar = require('./routes/verifyLoginGerenciar.js')
 
 
 
@@ -146,6 +150,10 @@ app.use('/', idRegisterComment);
 app.use('/auth', notifications);
 app.use('/', idEditCommentId);
 app.use('/', idDeleteCommentId);
+app.use('/auth', gerenciadorUsuarios);
+app.use('/auth', changeStatusProfessor);
+app.use('/auth', changeStatusAluno);
+app.use('/auth', verifyLoginGerenciar);
 app.use('/auth', logout);
 app.use('/auth', slug);
 

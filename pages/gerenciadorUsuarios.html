@@ -1,0 +1,242 @@
+<%- include('partials/header.html') %>
+  <% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+
+<div class="main-content">
+    <div class="content2">
+      <div class="panel">
+        <h2>Usuários Registrados</h2>
+        <br>
+        <button class="more2"><a href="/auth/registerAluno"> Cadastrar Aluno(a)</a></button>
+        <button class="more2"><a href="/auth/registerProfessor"> Cadastrar Professor(a)</a></button>
+        <form><input class="placeholder-colorBUSCA2" type="text" name="busca2" placeholder="Pesquise por algum usuário"/></form>
+      </div>
+      <div class="panel">
+        <h2 id="h2Professores" onclick="tb1()" class="no-select">Professores ➕</h2>
+        <table id="tbProfessoresPC">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-Mail</th>
+              <th>Materia</th>
+              <th>Opções</th>
+              <th>Status</th>
+              <th>Registrado em</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% professores.forEach((professor)=>{ %>
+              <tr>
+                <td><%= professor.name %></td>
+                <td><%= professor.email %></td>
+                <td><%= professor.materia %></td>
+                <td><button class="deleteProfileBtn" form="deleteForm<%= professor._id %>">Excluir</button>
+                <form action="/auth/delete/professor/<%= professor._id %> " class="add-comment" id="deleteForm<%= professor._id %>">
+                  <div class="modal myModal">
+                    <div class="modal-content">
+                      <span class="closeModal">❌</span>
+                      <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir o professor <%= professor.name %>?</p>
+                      <br><br>
+                      <div class="buttons">
+                        <button id="confirmBtn">Confirmar</button>
+                        <button type="button" class="btnVoltar">Voltar</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </td>
+              <td>
+                <% if(professor.status){ %>
+                  <button type="submit" class="statusBtn  statusBtnGreen deleteProfileBtn" form="changeStatusProfessor<%= professor._id %>">Ativo</button>
+                <% } else { %> 
+                  <button type="submit" class="statusBtn deleteProfileBtn" form="changeStatusProfessor<%= professor._id %>">Inativo</button>
+                <% } %>
+                <form action="/auth/changeStatus/professor/<%= professor._id %>" class="add-comment" id="changeStatusProfessor<%= professor._id %>">
+                  <div class="modal myModal">
+                    <div class="modal-content">
+                      <span class="closeModal">❌</span>
+                      <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja alterar o status do professor <%= professor.name %>?</p>
+                      <br><br>
+                      <div class="buttons">
+                        <button>Confirmar</button>
+                        <button type="button" class="btnVoltar">Voltar</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </td>
+              <td><%= professor.createdAt.toLocaleDateString('pt-BR') %></td>
+             </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <table id="tbProfessoresPHONE">
+          <tbody>
+            <% professores.forEach((professor)=>{ %>
+              <tr>
+                <td><b>Nome: </b><%= professor.name %></td>
+                <td><b>E-Mail: </b><%= professor.email %></td>
+                <td><b>Materia: </b><%= professor.materia %></td>
+                <td><b>Opções: </b><button class="deleteProfileBtn" form="deleteForm<%= professor._id %>">Excluir</button>
+                <form action="/auth/delete/professor/<%= professor._id %> " class="add-comment" id="deleteForm<%= professor._id %>">
+                  <div class="modal myModal">
+                    <div class="modal-content">
+                      <span class="closeModal">❌</span>
+                      <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir o professor <%= professor.name %>?</p>
+                      <br><br>
+                      <div class="buttons">
+                        <button id="confirmBtn">Confirmar</button>
+                        <button type="button" class="btnVoltar">Voltar</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </td>
+              <td>
+                <b>Status: </b>
+                <% if(professor.status){ %>
+                  <button type="submit" class="statusBtn  statusBtnGreen deleteProfileBtn" form="changeStatusProfessor<%= professor._id %>">Ativo</button>
+                <% } else { %> 
+                  <button type="submit" class="statusBtn deleteProfileBtn" form="changeStatusProfessor<%= professor._id %>">Inativo</button>
+                <% } %>
+                <form action="/auth/changeStatus/professor/<%= professor._id %>" class="add-comment" id="changeStatusProfessor<%= professor._id %>">
+                  <div class="modal myModal">
+                    <div class="modal-content">
+                      <span class="closeModal">❌</span>
+                      <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja alterar o status do professor <%= professor.name %>?</p>
+                      <br><br>
+                      <div class="buttons">
+                        <button>Confirmar</button>
+                        <button type="button" class="btnVoltar">Voltar</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </td>
+              <td><b>Registrado em: </b><%= professor.createdAt.toLocaleDateString('pt-BR') %></td>
+             </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2 id="h2Alunos" onclick="tb2()" class="no-select">Alunos ➕</h2>
+        <table id="tbAlunosPC">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Identificador do aluno</th>
+              <th>Comentários</th>
+              <th>Opções</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% aluno.forEach((aluno)=>{ %>
+              <tr>
+                <td><%= aluno.name %> <%= aluno.surname %></td>
+                <td><%= aluno.id_aluno %></td>
+                <td><%= aluno.comments.length %></td>
+                <td><button form="deleteFormAluno<%= aluno._id %>" class="deleteProfileBtn">Excluir</button>
+                  <form action="/<%= aluno.id %>/deleteAluno/" class="add-comment" id="deleteFormAluno<%= aluno._id %>">
+                    <div class="modal myModal">
+                      <div class="modal-content">
+                        <span class="closeModal">❌</span>
+                        <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir o cadastro do aluno <%= aluno.name %> <%= aluno.surname %>?</p>
+                        <br><br>
+                        <div class="buttons">
+                          <button id="confirmBtn">Confirmar</button>
+                          <button type="button" class="btnVoltar">Voltar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                <td>
+                  <% if(aluno.status){ %>
+                    <button type="submit" class="statusBtn  statusBtnGreen deleteProfileBtn" form="changeStatusAluno<%= aluno._id %>">Ativo</button>
+                  <% } else { %> 
+                    <button type="submit" class="statusBtn deleteProfileBtn" form="changeStatusAluno<%= aluno._id %>">Inativo</button>
+                  <% } %>
+                  <form action="/auth/changeStatus/aluno/<%= aluno._id %>" class="add-comment" id="changeStatusAluno<%= aluno._id %>">
+                    <div class="modal myModal">
+                      <div class="modal-content">
+                        <span class="closeModal">❌</span>
+                        <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja alterar o status do aluno <%= aluno.name %> <%= aluno.surname %>?</p>
+                        <br><br>
+                        <div class="buttons">
+                          <button>Confirmar</button>
+                          <button type="button" class="btnVoltar">Voltar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <table id="tbAlunosPHONE" >
+          <tbody>
+            <% aluno.forEach((aluno)=>{ %>
+              <tr>
+                <td><b>Nome:</b> <%= aluno.name %> <%= aluno.surname %></td>
+                <td><b>Identificador do aluno:</b> <%= aluno.id_aluno %></td>
+                <td><b>Comentários:</b> <%= aluno.comments.length %></td>
+                <td><b>Opções:</b> <button form="deleteFormAluno<%= aluno._id %>" class="deleteProfileBtn">Excluir</button>
+                  <form action="/<%= aluno.id %>/deleteAluno/" class="add-comment" id="deleteFormAluno<%= aluno._id %>">
+                    <div class="modal myModal">
+                      <div class="modal-content">
+                        <span class="closeModal">❌</span>
+                        <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir o cadastro do aluno <%= aluno.name %> <%= aluno.surname %>?</p>
+                        <br><br>
+                        <div class="buttons">
+                          <button id="confirmBtn">Confirmar</button>
+                          <button type="button" class="btnVoltar">Voltar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                <td>
+                  <b>Status:</b> 
+                  <% if(aluno.status){ %>
+                    <button type="submit" class="statusBtn  statusBtnGreen deleteProfileBtn" form="changeStatusAluno<%= aluno._id %>">Ativo</button>
+                  <% } else { %> 
+                    <button type="submit" class="statusBtn deleteProfileBtn" form="changeStatusAluno<%= aluno._id %>">Inativo</button>
+                  <% } %>
+                  <form action="/auth/changeStatus/aluno/<%= aluno._id %>" class="add-comment" id="changeStatusAluno<%= aluno._id %>">
+                    <div class="modal myModal">
+                      <div class="modal-content">
+                        <span class="closeModal">❌</span>
+                        <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja alterar o status do aluno <%= aluno.name %> <%= aluno.surname %>?</p>
+                        <br><br>
+                        <div class="buttons">
+                          <button>Confirmar</button>
+                          <button type="button" class="btnVoltar">Voltar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+
+<script src="../public/gerenciadorUsuarios.js"></script>
+
+<%- include('partials/footer.html') %>

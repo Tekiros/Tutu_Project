@@ -18,6 +18,9 @@ router.post('/:id/editAluno', verifyToken, verifyToken2, async (req,res)=>{
   const aluno = await Aluno.findById(id);
 
   try{
+    if(aluno.status == false){
+      return res.redirect('/?busca=')
+    }
     if(name == ''){
       req.flash('error', 'Você precisa preencher o campo "Nome".');
       return res.redirect(`/${id}/editAluno`);

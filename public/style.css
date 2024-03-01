@@ -32,11 +32,21 @@ textarea{
 .placeholder-colorBUSCA{
 	text-align: center;
 	width: 40%;
-    margin-left: 30%;
+  margin-left: 30%;
 	padding: 1%; 
 	border: 3px solid #6D3BB8; 
 	border-radius: 30px;
 }
+
+.placeholder-colorBUSCA2 {
+	text-align: center;
+	width: 410px;;
+	padding:0.8%;
+	border: 3px solid #6D3BB8;
+	border-radius: 30px;
+	margin-top: 5px;
+}
+
 
 div.sidebar{
 	background: #2D3035;
@@ -280,6 +290,25 @@ button.more{
 	align-items: center; 
 	margin: 0 auto; 
 }
+
+button.more2 {
+	font-size: 17px;
+	background-color: #2D3035;
+	color: white;
+	width: 200px;
+	height: 40px;
+	border-radius: 4px;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+}
+
+button.more2:hover {
+	background-color: #6D3BB8;
+	border-radius: 30px;
+	transition: 0.3s;
+	cursor: pointer;
+	}
 
 button.more:hover {
 background-color: #6D3BB8;
@@ -549,8 +578,9 @@ cursor: pointer;
 	color: white;
 }
 
+
 button.deleteProfileBtn {
-	background: #ffffff;
+	/* background: #ffffff; */
 	border: none;
 	color: red;
 	cursor: pointer;
@@ -566,6 +596,16 @@ button.deleteProfileBtn:hover {
 	box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); 
 }
 
+button.statusBtnGreen {
+	color: green;
+}
+
+button.statusBtnGreen:hover {
+	background-color: #e4ffdd;
+	color: green; 
+	border: 1px solid green;
+	box-shadow: 0 0 10px rgba(5, 161, 75, 0.5); 
+}
 
 .buttons{
 	display: flex;
@@ -712,6 +752,65 @@ button.deleteProfileBtn:hover {
 	display: none;
 }
 
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+th, td {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+th {
+	background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+#h2Professores, #h2Alunos{
+	cursor: pointer;
+}
+
+#tbProfessores, #tbAlunos{
+	display: none;
+}
+
+.no-select{
+  -webkit-user-select:none;  
+  -moz-user-select:none;     
+  -ms-user-select:none;      
+  user-select:none;  
+} 
+
+.no-active{
+	background: #dbdbdb
+}
+
+.no-active button{
+	display: none;
+}
+
+#tbProfessoresPHONE{
+	display: none;
+}
+#tbAlunosPHONE{
+	display: none;
+}
+
+#tbProfessoresPC{
+	display: none;
+}
+#tbAlunosPC{
+	display: none;
+}
+
+
+
 @media screen and (max-width: 900px){
 	header{display: block;}
 	.ultimas-atividades{display: none;}
@@ -776,6 +875,10 @@ button.deleteProfileBtn:hover {
 		margin: 1% 5% !important;
 		padding: 3% !important;
 	}
+
+	.placeholder-colorBUSCA2 {
+		width: 100%
+	}
 	.panel button.more{
 		font-size: 18px;
 		width: 100%;
@@ -808,4 +911,22 @@ button.deleteProfileBtn:hover {
 	}
 	.modal-content {width: 100%;}
 	.avisos h2{margin-bottom: 6% !important;}
+
+	th, td{
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	th{
+		text-align: center;
+	}
+
+	#tbProfessoresPHONE tr{
+		border: 2px solid black;
+	}
+
+	#tbAlunosPHONE tr{
+		border: 2px solid black;
+	}
 }

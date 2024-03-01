@@ -16,7 +16,7 @@ router.get('/addAviso', verifyToken, verifyPerfilSecretaria, async (req,res)=>{
       createdAt: dadosAvisos.createdAt,
     });
     return avisoInstance
-  })
+  });
   
   res.render('addAviso', {aviso:aviso})
 });

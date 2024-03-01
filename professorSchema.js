@@ -8,6 +8,8 @@ var professorSchema = new Schema({
     materia:String,
     email:String,
     password:String,
+    createdAt: {type: Date, default: Date.now},
+    status: {type: Boolean, default: true},
 });
 
 var Professor = mongoose.model('Professor', professorSchema)

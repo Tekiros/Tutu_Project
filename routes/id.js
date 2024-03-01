@@ -17,7 +17,13 @@ router.get('/:id', verifyToken, async (req,res)=>{
         req.flash('error', 'Aluno não encontrado');
         return res.redirect(`/${id}`);
       }
-      res.render('single', {alunoId:alunoId, comments:comments, user:user});
+      
+      if(alunoId.status == false){
+        return res.redirect('/?busca=')
+      }
+
+      return res.render('single', {alunoId:alunoId, comments:comments, user:user});
+      
     }catch(error){
       req.flash('error', 'Erro ao buscar aluno(a)');
       return res.redirect('/');

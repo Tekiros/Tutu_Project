@@ -19,6 +19,10 @@ router.post('/:id/registerComment', verifyToken, async (req,res, e)=>{
       return res.redirect(`/${id}`);
     }
 
+    if(aluno.status == false){
+      return res.redirect('/?busca=')
+    }
+
     const professor = await Professor.findById(req.user.id, '-password');
 
     if(!professor){

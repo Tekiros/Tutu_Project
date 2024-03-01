@@ -49,22 +49,25 @@
     const perfilSecretariaNao = document.getElementById('perfilSecretariaNao');
     const inputMateria = document.getElementById('inputMateria');
 
-    function perfilSecretariaSimBox() {
-      if(perfilSecretariaSim.checked) {
+    function perfilSecretariaSimBox(){
+      if(perfilSecretariaSim.checked){
         perfilSecretariaNao.disabled;
         perfilSecretariaNao.checked = false;
         inputMateria.disabled = true;
+        inputMateria.style.backgroundColor = '#ccc';
       }else{
         perfilSecretariaNao.checked = true;
         inputMateria.disabled = false;
+        inputMateria.style.backgroundColor = 'white';
       }
     }
-    function perfilSecretariaNaoBox() {
-      if(perfilSecretariaNao.checked) {
+    function perfilSecretariaNaoBox(){
+      if(perfilSecretariaNao.checked){
         perfilSecretariaSim.checked = false;
         inputMateria.disabled = false;
+        inputMateria.style.backgroundColor = 'white';
       }
     }
   </script>
-  <script src="../../public/registerProfessor.js"></script>
+  <script src="../public/registerProfessor.js"></script>
 <%- include('partials/footer.html') %>

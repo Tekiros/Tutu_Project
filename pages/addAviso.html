@@ -15,7 +15,7 @@
 <div class="main-content">
   <div class="content1" style="width: 100%;">
     <div class="center">
-      <div class="panel2" style="width: 60%;">
+      <div class="panel" style="width: 60%;">
           <h1>Novo Aviso</h1>
           <br>
           <form action="/auth/addAviso" method="post">
@@ -46,17 +46,6 @@
   </div>
 </div>
 
-<script>
-  const aviso = document.querySelector('.avisoVerify');
-  const avisos = document.querySelector('.avisos');
-  const titleH2 = document.getElementById('h2AviSo');
-
-  function verifyAviso() {
-    if(!aviso){
-    avisos.style.display = 'none'
-  }
-  }
-  verifyAviso()
-</script>
+<script src="../public/addAviso.js"></script>
 
 <%- include('partials/footer.html') %>

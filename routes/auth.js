@@ -15,7 +15,9 @@ router.get('/', verifyToken, async (req,res)=>{
             professor: historicoMensagem.professor,
             mensagem: historicoMensagem.mensagem,
         }));
+
         ////////////////////////////////////////////////////////
+
         const avisos = (await Avisos.find()).reverse();
         const aviso = avisos.map(dadosAvisos =>{
           const avisoInstance = new Avisos({
@@ -25,7 +27,8 @@ router.get('/', verifyToken, async (req,res)=>{
             createdAt: dadosAvisos.createdAt,
           });
           return avisoInstance
-        })
+        });
+
         ////////////////////////////////////////////////////////
 
         Professor.findById(req.user.id, '-password').then((user)=>{
@@ -45,14 +48,17 @@ router.get('/', verifyToken, async (req,res)=>{
       } 
     }else{
       try{
-        const regex = new RegExp(req.query.busca, 'i');
-        const resultadoAlunos = await Aluno.find({
-          $or: [
-            {name: regex},
-            {surname: regex}
-          ]
-        });
+        const busca = req.query.busca || '';
+        const palavrasChave = busca.split(' ').filter(Boolean);
       
+        const regexArray = palavrasChave.map(keyword =>({
+          $or:[
+            {name: {$regex: new RegExp(keyword, 'i')}},
+            {surname: {$regex: new RegExp(keyword, 'i')}}
+          ]
+        }));
+      
+        const resultadoAlunos = await Aluno.find({$and: regexArray.length > 0 ? regexArray : [{}]});
         const opcaoOrdenacao = req.query.ordenacao || 'maisComentarios';
       
         let resultadosOrdenados;
@@ -68,7 +74,7 @@ router.get('/', verifyToken, async (req,res)=>{
       
         res.render('busca', {aluno:resultadosOrdenados, contagem:resultadosOrdenados.length, busca:req.query.busca || ''});
       }catch(err){
-        req.flash('error', 'Erro ao buscar dados');
+        req.flash('error', 'Erro ao buscar dados', err);
         return res.redirect('/?busca=SemResultados');
       }
     }

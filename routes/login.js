@@ -61,8 +61,7 @@ router.post('/login', async (req,res)=>{
         );
 
         res.clearCookie('email');
-        res.cookie('cSIDCC', token, {httpOnly:true, maxAge:600000});
-        //secure:true, sameSite:'Strict' maxAge:600000
+        res.cookie('cSIDCC', token, {httpOnly:true, maxAge:600000, secure:true, sameSite:'Strict'});
         res.redirect('/');
     }catch(err){
         req.flash('error', 'Aconteceu um erro no servidor, tente novamente mais tarde');

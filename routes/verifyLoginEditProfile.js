@@ -64,8 +64,7 @@ router.post('/verifyLoginEditProfile', verifyToken, async (req,res)=>{
         }
         );
         
-        res.cookie('_mmsa_prod_intercome', tokenCreateProfessor, {httpOnly:true, maxAge:300000});
-        //secure:true, sameSite:'Strict'
+        res.cookie('_mmsa_prod_intercome', tokenCreateProfessor, {httpOnly:true, maxAge:300000, secure:true, sameSite:'Strict'});
         return res.redirect(`/${id}/editAluno`);
 
     }catch(err){

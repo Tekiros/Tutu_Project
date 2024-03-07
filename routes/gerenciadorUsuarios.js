@@ -33,7 +33,7 @@ router.get('/gerenciadorUsuarios', verifyToken, veirfyTokenGerenciar, verifyPerf
 
   const resultadoProfessor = await Professor.find({$and: regexArray.length > 0 ? regexArray : [{}]});
 
-  res.render('gerenciadorUsuarios', {professores:resultadoProfessor, aluno:resultadosOrdenadosAlunos, busca:req.query.busca || ''});
+  res.render('gerenciadorUsuarios', { professores: resultadoProfessor, aluno: resultadosOrdenadosAlunos, busca2: req.query.busca2 || '' });
 });
 
 module.exports = router;

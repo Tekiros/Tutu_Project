@@ -80,7 +80,8 @@
 	</div>
 	<div class="clear"></div>
 	<script>
-	  (async ()=>{
+		document.addEventListener('DOMContentLoaded', ()=>{
+				  (async ()=>{
 		const mensagemSingle = document.querySelectorAll('.mensagemSingle');
 		const nomeUsuarioAtual = '<%= user.apelido %>';
 		const JSON = await fetch('/auth/mensagens');
@@ -108,17 +109,19 @@
 
 		const perfilSecretaraia = '<%= user.perfilSecretaria %>';
 		const more = document.querySelector('.more');
-		const gerenciadorUsuariosMenu = document.querySelector('.gerenciadorUsuariosMenu');
+		const gerenciadorUsuariosMenu = document.querySelectorAll('.gerenciadorUsuariosMenu');
 		const avisoClosed = document.querySelectorAll('.btnCloseAviso');
 
 		function verifyPerfilSecretaria(){
 			if(perfilSecretaraia === 'false'){
-				gerenciadorUsuariosMenu.style.display = 'none';
 				more.style.display = 'none';
+				gerenciadorUsuariosMenu.forEach(e =>{e.style.display = 'none'});
 				avisoClosed.forEach(e =>{e.style.display = 'none';});
 			}
 		}
 		verifyPerfilSecretaria()
+		});
+		
 	</script>
 	<script src="../public/home.js"></script>
 <%- include('partials/footer.html') %>

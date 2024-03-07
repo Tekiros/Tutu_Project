@@ -7,8 +7,10 @@ const bcrypt = require('bcrypt');
 const secret = process.env.SECRET;
 
 
-router.get('/verifyLoginGerenciar', verifyToken, (req,res)=>{
-    res.render('verifyLogin');
+router.get('/verifyLoginGerenciar', verifyToken, async (req,res)=>{
+    const professor = await Professor.findById(req.user.id, '-password');
+
+    res.render('verifyLogin', {user:professor});
 });
   
 router.post('/verifyLoginGerenciar', verifyToken, async (req,res)=>{

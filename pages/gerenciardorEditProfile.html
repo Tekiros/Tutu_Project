@@ -1,0 +1,102 @@
+<%- include('partials/header.html') %>
+<% if (flashMessages.error) { %>
+    <div class="flash-message error-message error">
+      <%= flashMessages.error %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+  
+  <% if (flashMessages.success) { %>
+    <div class="flash-message success-message success">
+      <%= flashMessages.success %>
+      <button class="close-btn" onclick="closeFlash(this)">❌</button>
+    </div>
+  <% } %>
+  
+  <div class="center">
+    <div class="panel2" style="margin: 0;">
+      <h1>Editar Perfil</h1>
+      <br>
+      <form method="post" action="/auth/editProfile/<%= professorEdit._id %>" class="add-comment">
+        <h2>Nome</h2><input id="name" type="text" name="name" value="<%= professorEdit.name %>">
+        <h2>Apelido</h2><input type="text" name="apelido" value="<%= professorEdit.apelido %>">
+        <br>
+        <label>Perfil para secretaria</label>
+        <br>
+        <label>Sim</label>
+        <input type="checkbox" id="perfilSecretariaSim" name="boxPerfilSecretaria" onchange="perfilSecretariaSimBox()">
+        <label for="perfilSecretariaNao"> Não</label>
+        <input type="checkbox" id="perfilSecretariaNao" checked onchange="perfilSecretariaNaoBox()">
+        <br>
+        <h2 id="h2InputMateria">Materia</h2><input id="inputMateria" type="text" name="materia" value="<%= professorEdit.materia %>">
+        <h2>E-mail</h2><input required maxlength="200" type="email" name="email" value="<%= professorEdit.email %>">
+        <h2>Nova Senha</h2><input maxlength="50" type="password" name="password">
+        <h2>Confirme sua nova senha</h2><input maxlength="50" type="password" name="confirmpassword">
+        <br><br>
+        <button style="margin: 0 auto;">Confirmar</button>
+      </form>
+    </div>
+</div>
+
+
+<script>
+  const deleteUser = document.querySelector(".deleteProfileBtn");
+  const modal = document.getElementById("myModal");
+  const confirmBtn = document.getElementById("confirmBtn");
+  const closeModal = document.querySelector(".closeModal");
+  const btnVoltar = document.querySelector('.btnVoltar');
+
+  deleteUser.addEventListener("click", (e)=>{
+    e.preventDefault();
+    modal.style.display = "block";
+  });
+
+  btnVoltar.addEventListener("click", ()=>{
+    modal.style.display = "none";
+  });
+
+  closeModal.addEventListener("click", ()=>{
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", (event)=>{
+    if (event.target === modal){
+      modal.style.display = "none";
+    }
+  });
+
+  ////////////////////////////////////
+
+  const perfilSecretariaSim = document.getElementById('perfilSecretariaSim');
+  const perfilSecretariaNao = document.getElementById('perfilSecretariaNao');
+  const inputMateria = document.getElementById('inputMateria');
+  const h2InputMateria = document.getElementById('h2InputMateria');
+  const inputName = document.getElementById('name');
+  const perfilSecretaraia = '<%= user.perfilSecretaria %>';
+  const professorEdit = '<%= professorEdit.perfilSecretaria %>';
+
+  function teste22(){
+    if(professorEdit == 'true'){
+      perfilSecretariaSim.checked = true;
+      perfilSecretariaNao.checked = false;
+      perfilSecretariaNao.disabled = true;
+      perfilSecretariaSim.disabled = true;
+      inputMateria.disabled = true;
+      h2InputMateria.style.display = 'none';
+      inputMateria.style.display = 'none';
+      var br = document.createElement('br');
+      h2InputMateria.parentNode.insertBefore(br, h2InputMateria);
+    }else{
+      // inputName.disabled = true;
+      // inputMateria.disabled = true;
+      // inputMateria.style.backgroundColor = '#ccc';
+      // inputName.style.backgroundColor = '#ccc';
+      perfilSecretariaSim.disabled = true;
+      perfilSecretariaNao.disabled = true;
+    }
+  }
+  teste22()
+
+</script>
+
+<%- include('partials/footer.html') %>

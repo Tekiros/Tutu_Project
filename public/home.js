@@ -76,24 +76,24 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 /////////////////////////////////////////////////////////////////////
 
-const editProfile = document.getElementById("editProfile");
-const modal = document.getElementById("myModal");
-const closeModal = document.querySelector(".closeModal");
+// const editProfile = document.getElementById("editProfile");
+// const modal = document.getElementById("myModal");
+// const closeModal = document.querySelector(".closeModal");
 
-editProfile.addEventListener("click", (e)=>{
-  modal.style.display = "block";
-  e.preventDefault();
-});
+// editProfile.addEventListener("click", (e)=>{
+//   modal.style.display = "block";
+//   e.preventDefault();
+// });
 
-closeModal.addEventListener("click", ()=>{
-modal.style.display = "none";
-});
+// closeModal.addEventListener("click", ()=>{
+// modal.style.display = "none";
+// });
 
-window.addEventListener("click", (event)=>{
-if (event.target === modal){
-  modal.style.display = "none";
-}
-});
+// window.addEventListener("click", (event)=>{
+// if (event.target === modal){
+//   modal.style.display = "none";
+// }
+// });
 
 /////////////////////////////////////////////////////////////////////
 

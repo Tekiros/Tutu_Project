@@ -58,19 +58,4 @@ const menu = {
 };
 //////////////////////////////////////////////////////
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  const ordenacaoSelect = document.getElementById('ordenacaoSelect');
-  
-  ordenacaoSelect.addEventListener('change', ()=>{
-    const opcaoSelecionada = ordenacaoSelect.value;
-    const buscaQuery = new URLSearchParams(window.location.search);
-    
-    buscaQuery.set('ordenacao', opcaoSelecionada);
-    
-    window.location.search = buscaQuery.toString();
-  });
 
-  const buscaQuery = new URLSearchParams(window.location.search);
-  const opcaoSelecionada = buscaQuery.get('ordenacao') || 'maisComentarios';
-  ordenacaoSelect.value = opcaoSelecionada;
-});

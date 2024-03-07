@@ -16,7 +16,7 @@
 <div class="main-content">
   <div class="content2" style="overflow-x: hidden;">
      <div class="panel">
-      <div class="opcoesComentarios">
+      <div class="opcoesComentarios gerenciadorUsuariosMenu">
         <h1><i style="float: right;" class="fas fa-ellipsis-v"></i></h1>
         <div class="menu2">
           <ul>
@@ -29,7 +29,7 @@
      </div>
     <br>
     <div class="panel">
-      <form action="/<%= alunoId._id %>/registerComment" method="post" class="add-comment">
+      <form id="add-comment-form" action="/<%= alunoId._id %>/registerComment" method="post" class="add-comment">
         <h2>Insira um título para o comentário</h2>
         <textarea maxlength="150" id="commentTitle" name="commentTitle" placeholder="Insira seu titulo aqui ..." cols="10" rows="1"></textarea>
         <br>
@@ -116,6 +116,17 @@
   </div>
 </div>
 
+<script>
+  const perfilSecretaraia = '<%= user.perfilSecretaria %>';
+  const gerenciadorUsuariosMenu = document.querySelectorAll('.gerenciadorUsuariosMenu');
+
+  function verifyPerfilSecretaria(){
+    if(perfilSecretaraia === 'false'){
+      gerenciadorUsuariosMenu.forEach(e =>{e.style.display = 'none'});
+    }
+  }
+  verifyPerfilSecretaria()
+</script>
 <script src="../public/singleFunctions.js"></script>
 
 <%- include('partials/footer.html') %>

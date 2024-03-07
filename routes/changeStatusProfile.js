@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const verifyToken = require('./JS/verifyToken');
 const verifyTokenProfile = require('./JS/verifyTokenProfile');
+const verifyPerfilSecretaria = require('./JS/verifyProfileSecretaria.js');
 const Professor = require('../professorSchema');
 
-router.get('/changeStatus/professor/:professorId', verifyToken, verifyTokenProfile, async (req,res)=>{
+router.get('/changeStatus/professor/:professorId', verifyToken, verifyPerfilSecretaria, verifyTokenProfile, async (req,res)=>{
   try{
     const professorId = req.params.professorId;
     const professor = await Professor.findById(professorId);

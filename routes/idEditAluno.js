@@ -2,17 +2,18 @@ const express = require('express');
 const router = express.Router();
 const verifyToken = require('./JS/verifyToken.js');
 const verifyToken2 = require('./JS/verifyTokenEditProfile.js');
+const verifyPerfilSecretaria = require('./JS/verifyProfileSecretaria.js');
 const Aluno = require('../alunosSchema.js');
 
 
-router.get('/:id/editAluno', verifyToken, verifyToken2, async (req,res)=>{
+router.get('/:id/editAluno', verifyToken,verifyPerfilSecretaria, verifyToken2, async (req,res)=>{
   const {id} = req.params;
   const aluno = await Aluno.findById(id);
 
   res.render('editAluno', {aluno:aluno})
 });
 
-router.post('/:id/editAluno', verifyToken, verifyToken2, async (req,res)=>{
+router.post('/:id/editAluno', verifyToken, verifyPerfilSecretaria, verifyToken2, async (req,res)=>{
   const {name, surname, id_aluno} = req.body;
   const {id} = req.params;
   const aluno = await Aluno.findById(id);

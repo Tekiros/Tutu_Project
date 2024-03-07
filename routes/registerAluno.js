@@ -3,10 +3,13 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const verifyToken = require('./JS/verifyToken.js');
 const Aluno = require('../alunosSchema.js');
+const Professor = require('../professorSchema.js');
 
 
 router.get('/registerAluno', verifyToken, async (req,res)=>{
-  res.render('registerAluno');
+  const user = await Professor.findById(req.user.id, '-password');
+
+  res.render('registerAluno', {user:user});
 });
   
 router.post('/registerAluno', verifyToken, async (req,res)=>{

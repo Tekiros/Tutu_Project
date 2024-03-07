@@ -5,26 +5,31 @@ const verifyToken = require('./JS/verifyToken.js');
 const verifyTokenProfile = require('./JS/verifyTokenProfile.js');
 const Professor = require('../professorSchema.js');
 
-router.get('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
+router.get('/editProfile/:idProfessor', verifyToken, verifyTokenProfile, async (req,res)=>{
+  const {idProfessor} = req.params;
+  const professorEdit = await Professor.findById(idProfessor);
+
   Professor.findById(req.user.id, '-password').then((user)=>{
     if(!user){
       res.clearCookie('cSIDCC');
-      res.clearCookie('tokenCreateProfessor');
+      res.clearCookie('_mmsa_prod_intercome');
       res.redirect('/auth/login');
     }else{
-      res.render('editProfile', {user:user})
+      res.render('gerenciardorEditProfile', {user:user, professorEdit:professorEdit});
     }
   }).catch(()=>{
     req.flash('error', 'Erro ao buscar dados');
-    return res.redirect('/')
-  })
+    return res.redirect('/auth/gerenciadorUsuarios');
+  });
 });
 
-router.post('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
+router.post('/editProfile/:idProfessor', verifyToken, verifyTokenProfile, async (req,res)=>{
+  const {idProfessor} = req.params;
+
   try{
     const {name, apelido, materia, email, password, confirmpassword} = req.body;
-    const professor = await Professor.findById(req.user.id, '-password');
-    const userExist = await Professor.findOne({email:email});
+    const professor = await Professor.findById(idProfessor);
+    const USER = await Professor.findById(req.user.id, '-password');
   
     const calcEmail = {
       maxEmailLength(){
@@ -71,23 +76,27 @@ router.post('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
       },
     };
   
-    if(name == ''){
-      req.flash('error', 'Você precisa preencher o campo "Nome Completo".');
-      return res.redirect('/auth/editProfile');
+    if(USER.perfilSecretaria == true){
+      if(name == ''){
+        req.flash('error', 'Você precisa preencher o campo "Nome Completo".');
+        return res.redirect(`/auth/editProfile/${idProfessor}`);
+      }
+      professor.name = name
     }
-    professor.name = name
   
     if(apelido == ''){
       req.flash('error', 'Você precisa preencher o campo "Apelido ou primeiro nome".');
-      return res.redirect('/auth/editProfile');
+      return res.redirect(`/auth/editProfile/${idProfessor}`);
     }
     professor.apelido = apelido;
     
-    if(materia == ''){
-      req.flash('error', 'Você precisa preencher o campo "Matéria Lecionada".');
-      return res.redirect('/auth/editProfile');
+    if(USER.perfilSecretaria == true){
+      if(materia == ''){
+        req.flash('error', 'Você precisa preencher o campo "Matéria Lecionada".');
+        return res.redirect(`/auth/editProfile/${idProfessor}`);
+      }
+      professor.materia = materia;
     }
-    professor.materia = materia;
     
     if(password){
       calcPassword.maxPasswordLength();
@@ -102,19 +111,21 @@ router.post('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
   
     calcEmail.maxEmailLength();
     calcEmail.verifyEmail();
-    professor.email = email
+    professor.email = email;
     
     await professor.save();
   
     req.flash('success', 'Dados atualizados com sucesso.');
-    return res.redirect('/auth/editProfile');
+    return res.redirect(`/auth/editProfile/${idProfessor}`);
 
   }catch(error){
-    console.log(error)
-    // req.flash('error', 'Esse e-mail já esta cadastrado.');
-    // return res.redirect('/auth/editProfile');
+    if(error instanceof ReferenceError && error.message.includes('userExist is not defined')){
+      req.flash('error', 'Este e-mail já está em uso por outro usuário.');
+    }else{
+      req.flash('error', 'Erro ao processar solicitação.', error);
+    }
+    return res.redirect(`/auth/editProfile/${idProfessor}`);
   }
-
 });
 
 module.exports = router;

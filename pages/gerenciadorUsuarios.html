@@ -32,7 +32,7 @@
               <th>Materia</th>
               <th>Opções</th>
               <th>Status</th>
-              <th>Registrado em</th>
+              <!-- <th>Registrado em</th> -->
             </tr>
           </thead>
           <tbody>
@@ -41,25 +41,27 @@
                 <td><%= professor.name %></td>
                 <td><%= professor.email %></td>
                 <td><%= professor.materia %></td>
-                <td><button class="deleteProfileBtn" form="deleteForm<%= professor._id %>">Excluir</button>
-                <form action="/auth/delete/professor/<%= professor._id %> " class="add-comment" id="deleteForm<%= professor._id %>">
-                  <div class="modal myModal">
-                    <div class="modal-content">
-                      <span class="closeModal">❌</span>
-                      <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir o professor <%= professor.name %>?</p>
-                      <br><br>
-                      <div class="buttons">
-                        <button id="confirmBtn">Confirmar</button>
-                        <button type="button" class="btnVoltar">Voltar</button>
+                <td>
+                  <a class="hoverColor" href="/auth/editProfile/<%= professor._id %>/">Editar</a>
+                  <button class="deleteProfileBtn" form="deleteForm<%= professor._id %>">Excluir</button>
+                  <form action="/auth/delete/professor/<%= professor._id %> " class="add-comment" id="deleteForm<%= professor._id %>">
+                    <div class="modal myModal">
+                      <div class="modal-content">
+                        <span class="closeModal">❌</span>
+                        <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir o professor <%= professor.name %>?</p>
+                        <br><br>
+                        <div class="buttons">
+                          <button id="confirmBtn">Confirmar</button>
+                          <button type="button" class="btnVoltar">Voltar</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </form>
+                  </form>
               </td>
               <td>
                 <% if(professor.status){ %>
                   <button type="submit" class="statusBtn  statusBtnGreen deleteProfileBtn" form="changeStatusProfessor<%= professor._id %>">Ativo</button>
-                <% } else { %> 
+                <% }else{ %> 
                   <button type="submit" class="statusBtn deleteProfileBtn" form="changeStatusProfessor<%= professor._id %>">Inativo</button>
                 <% } %>
                 <form action="/auth/changeStatus/professor/<%= professor._id %>" class="add-comment" id="changeStatusProfessor<%= professor._id %>">
@@ -76,7 +78,7 @@
                   </div>
                 </form>
               </td>
-              <td><%= professor.createdAt.toLocaleDateString('pt-BR') %></td>
+              <!-- <td><%= professor.createdAt.toLocaleDateString('pt-BR') %></td> -->
              </tr>
             <% }) %>
           </tbody>
@@ -88,7 +90,9 @@
                 <td><b>Nome: </b><%= professor.name %></td>
                 <td><b>E-Mail: </b><%= professor.email %></td>
                 <td><b>Materia: </b><%= professor.materia %></td>
-                <td><b>Opções: </b><button class="deleteProfileBtn" form="deleteForm<%= professor._id %>">Excluir</button>
+                <td><b>Opções: </b>
+                <a class="hoverColor" href="/auth/editProfile/<%= professor._id %>/">Editar</a>
+                <button class="deleteProfileBtn" form="deleteForm<%= professor._id %>">Excluir</button>
                 <form action="/auth/delete/professor/<%= professor._id %> " class="add-comment" id="deleteForm<%= professor._id %>">
                   <div class="modal myModal">
                     <div class="modal-content">
@@ -145,11 +149,13 @@
           </thead>
           <tbody>
             <% aluno.forEach((aluno)=>{ %>
-              <tr>
-                <td><%= aluno.name %> <%= aluno.surname %></td>
+              <tr class="placeholder-b8b6b6">
+                <td><a class="<%= aluno.status %>" href="/<%= aluno._id %>" style="color: black;"><%= aluno.name %> <%= aluno.surname %></a></td>
                 <td><%= aluno.id_aluno %></td>
                 <td><%= aluno.comments.length %></td>
-                <td><button form="deleteFormAluno<%= aluno._id %>" class="deleteProfileBtn">Excluir</button>
+                <td>
+                  <a class="hoverColor" href="/<%= aluno._id %>/editAluno/">Editar</a>   
+                  <button form="deleteFormAluno<%= aluno._id %>" class="deleteProfileBtn">Excluir</button>
                   <form action="/<%= aluno.id %>/deleteAluno/" class="add-comment" id="deleteFormAluno<%= aluno._id %>">
                     <div class="modal myModal">
                       <div class="modal-content">
@@ -163,6 +169,7 @@
                       </div>
                     </div>
                   </form>
+                </td>
                 <td>
                   <% if(aluno.status){ %>
                     <button type="submit" class="statusBtn  statusBtnGreen deleteProfileBtn" form="changeStatusAluno<%= aluno._id %>">Ativo</button>
@@ -191,10 +198,12 @@
           <tbody>
             <% aluno.forEach((aluno)=>{ %>
               <tr>
-                <td><b>Nome:</b> <%= aluno.name %> <%= aluno.surname %></td>
+                <td><b>Nome:</b> <a class="<%= aluno.status %>" href="/<%= aluno._id %>" style="color: black;"><%= aluno.name %> <%= aluno.surname %></a></td>
                 <td><b>Identificador do aluno:</b> <%= aluno.id_aluno %></td>
                 <td><b>Comentários:</b> <%= aluno.comments.length %></td>
-                <td><b>Opções:</b> <button form="deleteFormAluno<%= aluno._id %>" class="deleteProfileBtn">Excluir</button>
+                <td><b>Opções:</b> 
+                  <a class="hoverColor" href="/<%= aluno._id %>/editAluno/">Editar</a>
+                  <button form="deleteFormAluno<%= aluno._id %>" class="deleteProfileBtn">Excluir</button>
                   <form action="/<%= aluno.id %>/deleteAluno/" class="add-comment" id="deleteFormAluno<%= aluno._id %>">
                     <div class="modal myModal">
                       <div class="modal-content">
@@ -237,6 +246,15 @@
     </div>
 </div>
 
+<script>
+  const alunoStatus = document.querySelectorAll('.false');
+
+  alunoStatus.forEach(a =>{
+    a.href = '#';
+    console.log(a)
+  });
+
+</script>
 <script src="../public/gerenciadorUsuarios.js"></script>
 
 <%- include('partials/footer.html') %>

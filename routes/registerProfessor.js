@@ -3,14 +3,15 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const verifyToken = require('./JS/verifyToken.js');
 const verifyTokenProfessor = require('./JS/verifyTokenProfessor.js');
+const verifyPerfilSecretaria = require('./JS/verifyProfileSecretaria.js');
 const Professor = require('../professorSchema.js');
 
 
-router.get('/registerProfessor', verifyToken, verifyTokenProfessor,  async (req,res)=>{
+router.get('/registerProfessor', verifyToken, verifyPerfilSecretaria, verifyTokenProfessor,  async (req,res)=>{
   res.render('registerProfessor')
 });
   
-router.post('/registerProfessor', verifyToken, verifyTokenProfessor, async (req,res)=>{
+router.post('/registerProfessor', verifyToken, verifyPerfilSecretaria, verifyTokenProfessor, async (req,res)=>{
   const {name, apelido, boxPerfilSecretaria, materia, email, password, confirmpassword} = req.body;
   const userExist = await Professor.findOne({email:email});
   const perfilSecretaria = boxPerfilSecretaria && boxPerfilSecretaria.toLowerCase() === 'on';

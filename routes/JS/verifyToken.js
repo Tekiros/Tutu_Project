@@ -10,10 +10,13 @@ async function verifyToken(req, res, next){
 
     if(existingToken){
       res.clearCookie('cSIDCC');
+      res.clearCookie('_mmsa_prod_intercome');
       return res.redirect('/auth/login');
     }
 
     if(!token){
+      res.clearCookie('cSIDCC');
+      res.clearCookie('_mmsa_prod_intercome');
       return res.redirect('/auth/login');
     }
 

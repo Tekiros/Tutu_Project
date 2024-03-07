@@ -23,6 +23,8 @@
       <script>
         document.addEventListener('DOMContentLoaded', ()=>{
           const socket = io();
+          const perfilSecretaraia = '<%= user.perfilSecretaria %>';
+          const gerenciadorUsuariosMenu = document.querySelectorAll('.gerenciadorUsuariosMenu');
           const nomeUsuarioAtual = '<%= user.apelido %>';
           const messages = document.getElementById('messages');
           const form = document.getElementById('form');
@@ -108,7 +110,17 @@
               }
             });
           });
-        });
+          
+          ///////////////////////////////////////////
+
+
+          function verifyPerfilSecretaria(){
+            if(perfilSecretaraia === 'false'){
+              gerenciadorUsuariosMenu.forEach(e =>{e.style.display = 'none'});
+            }
+          }
+          verifyPerfilSecretaria();
+          });
       </script>
     </div>
   </div>

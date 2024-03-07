@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('./JS/verifyToken.js');
+const verifyPerfilSecretaria = require('./JS/verifyProfileSecretaria.js');
 const verifyToken2 = require('./JS/verifyTokenProfessor.js');
 const Professor = require('../professorSchema.js');
 
-router.get('/delete/professor/:professorId', verifyToken, verifyToken2, async (req,res)=>{
+router.get('/delete/professor/:professorId', verifyToken, verifyPerfilSecretaria, verifyToken2, async (req,res)=>{
   try{
     const professorId = req.params.professorId;
     await Professor.findByIdAndDelete(professorId);

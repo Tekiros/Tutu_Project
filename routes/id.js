@@ -6,7 +6,7 @@ const Professor = require('../professorSchema.js');
 
 
 router.get('/:id', verifyToken, async (req,res)=>{
-  const {id} = req.params
+  const {id} = req.params;
 
   professor = await Professor.findById(req.user.id, '-password').then(async (user)=>{
     try{

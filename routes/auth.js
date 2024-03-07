@@ -44,10 +44,12 @@ router.get('/', verifyToken, async (req,res)=>{
           return res.redirect('/auth/login');
         });
       }catch(err){
-        console.log(err);
+        req.flash('error', 'Erro ao buscar dados' + err);
+        return res.redirect('/auth');
       } 
     }else{
       try{
+        const user = await Professor.findById(req.user.id, '-password');
         const busca = req.query.busca || '';
         const palavrasChave = busca.split(' ').filter(Boolean);
       
@@ -72,7 +74,7 @@ router.get('/', verifyToken, async (req,res)=>{
           });
         }
       
-        res.render('busca', {aluno:resultadosOrdenados, contagem:resultadosOrdenados.length, busca:req.query.busca || ''});
+        res.render('busca', {user:user, aluno:resultadosOrdenados, contagem:resultadosOrdenados.length, busca:req.query.busca || ''});
       }catch(err){
         req.flash('error', 'Erro ao buscar dados', err);
         return res.redirect('/?busca=SemResultados');

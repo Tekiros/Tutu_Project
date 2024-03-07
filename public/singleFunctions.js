@@ -7,28 +7,48 @@ const commentTitle = document.getElementById('commentTitle');
 const textModal = document.getElementById('textModal');
 const btnVoltar = document.querySelector('.btnVoltar');
 
-addComent.addEventListener("click", (e)=>{
-  if(commentText.value == '' || commentTitle.value == ''){
+let adicionandoComentario = false;
+
+addComent.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  if (adicionandoComentario) {
+    return;
+  }
+
+  if (commentText.value == '' || commentTitle.value == '') {
     textModal.innerText = 'Você precisa inserir um comentário!';
-  }else{
+  } else {
+    adicionandoComentario = true;
     modal.style.display = "block";
-    e.preventDefault();
   }
 });
 
-btnVoltar.addEventListener("click", ()=>{
-  modal.style.display = "none";
+confirmBtn.addEventListener("click", () => {
+  if (adicionandoComentario) {
+    document.getElementById('add-comment-form').submit();
+    confirmBtn.disabled = true;
+  }
 });
 
-closeModal.addEventListener("click", ()=>{
+btnVoltar.addEventListener("click", () => {
   modal.style.display = "none";
+  adicionandoComentario = false;
 });
 
-window.addEventListener("click", (event)=>{
-  if (event.target === modal){
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
+  adicionandoComentario = false;
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
     modal.style.display = "none";
+    adicionandoComentario = false;
   }
 });
+
+
 
 ////////////////////////////////////////////////////////////////
 

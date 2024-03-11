@@ -15,20 +15,10 @@ router.get('/chat', verifyToken, async (req,res)=>{
         mensagem: historicoMensagem.mensagem,
       }));
 
+      const professor = await Professor.findById(req.user.id, '-password');
+      res.render('chat', {user:professor, mensagem:dadosMensagem});
       
-      Professor.findById(req.user.id, '-password').then((user)=>{
-        if(!user){
-          res.clearCookie('_mmsa_prod_intercome');
-          res.clearCookie('cSIDCC');
-          res.redirect('/auth/login');
-        }else{
-          res.render('chat', {user:user, mensagem:dadosMensagem});
-        }
-      }).catch(()=>{
-        req.flash('error', 'Erro ao buscar mensagens');
-        return res.redirect('/');
-      });
-    } catch (err) {
+    }catch (err){
       console.log(err);
     }
 });

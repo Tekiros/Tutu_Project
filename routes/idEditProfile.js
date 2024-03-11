@@ -6,26 +6,15 @@ const verifyTokenProfile = require('./JS/verifyTokenProfile.js');
 const Professor = require('../professorSchema.js');
 
 router.get('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
-  Professor.findById(req.user.id, '-password').then((user)=>{
-    if(!user){
-      res.clearCookie('cSIDCC');
-      res.clearCookie('tokenCreateProfessor');
-      res.redirect('/auth/login');
-    }else{
-      res.render('editProfile', {user:user})
-    }
-  }).catch(()=>{
-    req.flash('error', 'Erro ao buscar dados');
-    return res.redirect('/')
-  })
+  const professor = await Professor.findById(req.user.id, '-password');
+  res.render('editProfile', {user:professor});
 });
 
 router.post('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
   try{
-    const {name, apelido, materia, email, password, confirmpassword} = req.body;
+    const {name, apelido, email, password, confirmpassword} = req.body;
     const professor = await Professor.findById(req.user.id, '-password');
-    const userExist = await Professor.findOne({email:email});
-  
+
     const calcEmail = {
       maxEmailLength(){
         if(email.length > 200){
@@ -35,12 +24,17 @@ router.post('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
         return false;
       },
   
-      verifyEmail(e){
-        if(email !== professor.email){
-          if(userExist){
-            e.preventDefault();
-            req.flash('error', 'Esse e-mail já está em uso. ')
+      async verifyEmail() {
+        try {
+          if (email !== professor.email) {
+            const userExist = await Professor.findOne({ email: email });
+            if (userExist) {
+              e.preventDefault();
+              req.flash('error', 'Esse e-mail já está em uso.');
+            }
           }
+        } catch (error) {
+          console.error('Erro ao verificar Email, tente novamente.');
         }
       }
     };
@@ -71,50 +65,46 @@ router.post('/editProfile', verifyToken, verifyTokenProfile, async (req,res)=>{
       },
     };
   
-    if(name == ''){
-      req.flash('error', 'Você precisa preencher o campo "Nome Completo".');
-      return res.redirect('/auth/editProfile');
+    if(professor.perfilSecretaria == true){
+      if(name == ''){
+        req.flash('error', 'Você precisa preencher o campo "Nome Completo".');
+        return res.redirect('/auth/editProfile/');
+      }
+      professor.name = name
     }
-    professor.name = name
   
     if(apelido == ''){
       req.flash('error', 'Você precisa preencher o campo "Apelido ou primeiro nome".');
-      return res.redirect('/auth/editProfile');
+      return res.redirect('/auth/editProfile/');
     }
     professor.apelido = apelido;
     
-    if(materia == ''){
-      req.flash('error', 'Você precisa preencher o campo "Matéria Lecionada".');
+    
+    if(calcPassword.maxPasswordLength() || calcPassword.minPasswordLength() || calcPassword.checkPassword()){
       return res.redirect('/auth/editProfile');
     }
-    professor.materia = materia;
-    
-    if(password){
-      calcPassword.maxPasswordLength();
-      calcPassword.minPasswordLength();
-      calcPassword.checkPassword();
-  
-      const salt = await bcrypt.genSalt(12);
-      const passwordHash = await bcrypt.hash(password, salt);
-      
-      professor.password = passwordHash
-    }
+
+    const salt = await bcrypt.genSalt(12);
+    const passwordHash = await bcrypt.hash(password, salt);
+    professor.password = passwordHash;
   
     calcEmail.maxEmailLength();
     calcEmail.verifyEmail();
-    professor.email = email
+    professor.email = email;
     
     await professor.save();
   
     req.flash('success', 'Dados atualizados com sucesso.');
-    return res.redirect('/auth/editProfile');
+    return res.redirect('/auth/editProfile/');
 
   }catch(error){
-    console.log(error)
-    // req.flash('error', 'Esse e-mail já esta cadastrado.');
-    // return res.redirect('/auth/editProfile');
+    if(error instanceof ReferenceError && error.message.includes('userExist is not defined')){
+      req.flash('error', 'Este e-mail já está em uso por outro usuário.', error);
+    }else{
+      req.flash('error', 'Erro ao processar solicitação.', error);
+    }
+    return res.redirect('/auth/editProfile/');
   }
-
 });
 
 module.exports = router;

@@ -15,8 +15,7 @@ async function verifyToken(req, res, next){
     }
 
     if(!token){
-      res.clearCookie('cSIDCC');
-      res.clearCookie('_mmsa_prod_intercome');
+      (req,res,next).preventDefault();
       return res.redirect('/auth/login');
     }
 

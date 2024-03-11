@@ -31,18 +31,8 @@ router.get('/', verifyToken, async (req,res)=>{
 
         ////////////////////////////////////////////////////////
 
-        Professor.findById(req.user.id, '-password').then((user)=>{
-          if(!user){
-            res.clearCookie('cSIDCC');
-            res.clearCookie('_mmsa_prod_intercome');
-            res.redirect('/auth/login');
-          }else{
-            res.render('home',{user:user, mensagem:dadosMensagem, aviso:aviso});
-          }
-        }).catch(()=>{
-          req.flash('error', 'Erro ao buscar dados');
-          return res.redirect('/auth/login');
-        });
+        const professor = await Professor.findById(req.user.id, '-password');
+        res.render('home',{user:professor, mensagem:dadosMensagem, aviso:aviso});
       }catch(err){
         req.flash('error', 'Erro ao buscar dados' + err);
         return res.redirect('/auth');

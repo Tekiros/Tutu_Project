@@ -8,19 +8,9 @@ const Professor = require('../professorSchema.js');
 router.get('/editProfile/:idProfessor', verifyToken, verifyTokenProfile, async (req,res)=>{
   const {idProfessor} = req.params;
   const professorEdit = await Professor.findById(idProfessor);
+  const user = await Professor.findById(req.user.id, '-password');
 
-  Professor.findById(req.user.id, '-password').then((user)=>{
-    if(!user){
-      res.clearCookie('cSIDCC');
-      res.clearCookie('_mmsa_prod_intercome');
-      res.redirect('/auth/login');
-    }else{
-      res.render('gerenciardorEditProfile', {user:user, professorEdit:professorEdit});
-    }
-  }).catch(()=>{
-    req.flash('error', 'Erro ao buscar dados');
-    return res.redirect('/auth/gerenciadorUsuarios');
-  });
+  res.render('gerenciardorEditProfile', {user:user, professorEdit:professorEdit});
 });
 
 router.post('/editProfile/:idProfessor', verifyToken, verifyTokenProfile, async (req,res)=>{

@@ -18,7 +18,7 @@
       <h1>Editar Perfil</h1>
       <br>
       <form method="post" action="/auth/editProfile" class="add-comment">
-        <h2>Nome</h2><input type="text" name="name" value="<%= user.name %>">
+        <h2>Nome </h2><input id="inputName" type="text" name="name" value="<%= user.name %>">
         <h2>Apelido</h2><input type="text" name="apelido" value="<%= user.apelido %>">
         <br>
         <div id="checkboxs">
@@ -30,7 +30,7 @@
           <input type="checkbox" id="perfilSecretariaNao" checked onchange="perfilSecretariaNaoBox()">
           <br>
         </div>
-        <h2 id="h2InputMateria">Materia</h2><input id="inputMateria" type="text" name="materia" value="<%= user.materia %>">
+        <h2 id="h2InputMateria">Materia</h2><input id="inputMateria" type="text" value="<%= user.materia %>">
         <h2>E-mail</h2><input required maxlength="200" type="email" name="email" value="<%= user.email %>">
         <h2>Nova Senha</h2><input maxlength="50" type="password" name="password">
         <h2>Confirme sua nova senha</h2><input maxlength="50" type="password" name="confirmpassword">
@@ -53,6 +53,7 @@
 
     ////////////////////////////////////
 
+  const inputName = document.getElementById('inputName');
   const perfilSecretariaSim = document.getElementById('perfilSecretariaSim');
   const perfilSecretariaNao = document.getElementById('perfilSecretariaNao');
   const inputMateria = document.getElementById('inputMateria');
@@ -65,12 +66,15 @@
       perfilSecretariaNao.checked = false;
       perfilSecretariaNao.disabled = true;
       perfilSecretariaSim.disabled = true;
-      inputMateria.disabled = true;
       h2InputMateria.style.display = 'none';
       inputMateria.style.display = 'none';
       var br = document.createElement('br');
       h2InputMateria.parentNode.insertBefore(br, h2InputMateria);
     }else{
+      inputName.disabled = true;
+      inputMateria.disabled = true;
+      inputMateria.style.backgroundColor = '#ccc';
+      inputName.style.backgroundColor = '#ccc';
       perfilSecretariaSim.disabled = true;
       perfilSecretariaNao.disabled = true;
       checkboxs.style.display = 'none';

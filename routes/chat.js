@@ -9,8 +9,13 @@ router.get('/chat', verifyToken, async (req,res)=>{
     try{
       const messageLimit = req.session.messageLimit || 8;
 
-      const historicomensagens = (await HistoricoChat.find().sort({createdAt: -1}).limit(messageLimit)).reverse();
+      const historicomensagens = (await HistoricoChat.find()
+      .sort({createdAt: -1})
+      .limit(messageLimit))
+      .reverse();
+
       const dadosMensagem = historicomensagens.map((historicoMensagem)=>({
+        _id: historicoMensagem._id,
         professor: historicoMensagem.professor,
         mensagem: historicoMensagem.mensagem,
       }));
@@ -19,7 +24,7 @@ router.get('/chat', verifyToken, async (req,res)=>{
       res.render('chat', {user:professor, mensagem:dadosMensagem});
       
     }catch (err){
-      console.log(err);
+      req.flash('error', 'Erro ao buscar dados');
     }
 });
 

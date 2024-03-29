@@ -15,7 +15,7 @@ router.post('/registerProfessor', verifyToken, verifyPerfilSecretaria, verifyTok
   const {name, apelido, boxPerfilSecretaria, materia, email, password, confirmpassword} = req.body;
   const userExist = await Professor.findOne({email:email});
   const perfilSecretaria = boxPerfilSecretaria && boxPerfilSecretaria.toLowerCase() === 'on';
-
+  const apelidoWithoutSpaces = apelido.replace(/\s/g, '');
   const maxEmailLength = 200;
   const maxPasswordLength = 50;
   const minPasswordLength = 6;
@@ -75,7 +75,7 @@ router.post('/registerProfessor', verifyToken, verifyPerfilSecretaria, verifyTok
   const passwordHash = await bcrypt.hash(password, salt);
   const user = new Professor({
     name,
-    apelido,
+    apelido: apelidoWithoutSpaces,
     email,
     perfilSecretaria,
     materia,

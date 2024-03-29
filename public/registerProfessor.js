@@ -12,3 +12,7 @@ document.addEventListener('click', (event)=>{
 });
 
 ///////////////////////////////////////////////
+
+function limitarEspacos(input) {
+    input.value = input.value.replace(/\s/g, '');
+}

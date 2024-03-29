@@ -32,12 +32,11 @@
               <th>Materia</th>
               <th>Opções</th>
               <th>Status</th>
-              <!-- <th>Registrado em</th> -->
             </tr>
           </thead>
           <tbody>
             <% professores.forEach((professor)=>{ %>
-              <tr>
+              <tr class="placeholder-b8b6b6">
                 <td><%= professor.name %></td>
                 <td><%= professor.email %></td>
                 <td><%= professor.materia %></td>
@@ -251,7 +250,6 @@
 
   alunoStatus.forEach(a =>{
     a.href = '#';
-    console.log(a)
   });
 
 </script>

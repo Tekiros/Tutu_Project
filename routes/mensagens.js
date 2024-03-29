@@ -11,7 +11,9 @@ router.get('/mensagens', verifyToken, async (req,res)=>{
   try{
     Professor.findById(req.user.id, '-password').then((user)=>{
       const dadosMensagem = historicomensagens.map(historicoMensagem =>({
+        _id: historicoMensagem._id,
         professor: historicoMensagem.professor,
+        apelido: historicoMensagem.apelido,
         mensagem: historicoMensagem.mensagem,
         usuarioAtual: historicoMensagem.professor == user.apelido,
     }));

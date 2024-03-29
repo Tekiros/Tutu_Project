@@ -1,142 +1,231 @@
-<%- include('partials/headerChat.html') %>
-    <div class="main-content2">
-      <div id="chat">
-        <ul id="messages">
-          <h3 style="text-align: center;">Mensagens antigas</h3>
-          <br>
-          <form id="moreMessage" action="/auth/chat/increase-limit" method="POST">
-            <button class="more" type="submit">Carregar mais mensagens</button>
-          </form>
-          <br>
-          <% mensagem.forEach((mensagem)=>{ %>
-            <li class="mensagemSingle"><p style="font-weight: 600;"><%= mensagem.professor %> </p><br><p><%= mensagem.mensagem %></p></li>
-          <% }); %>
-          <br>
-          <h3 id="h3" style="text-align: center;">Mensagens recentes</h3>
-          <br>
-        </ul>
-      <form id="form">
-        <input maxlength="3000" id="input" autocomplete="off" /><button><h2><i class="fas fa-paper-plane"></i></h2></button>
-      </form>
-  
-      <script src="/socket.io/socket.io.js"></script>
-      <script>
-        document.addEventListener('DOMContentLoaded', ()=>{
-          const socket = io();
-          const perfilSecretaraia = '<%= user.perfilSecretaria %>';
-          const gerenciadorUsuariosMenu = document.querySelectorAll('.gerenciadorUsuariosMenu');
-          const nomeUsuarioAtual = '<%= user.apelido %>';
-          const messages = document.getElementById('messages');
-          const form = document.getElementById('form');
-          const input = document.getElementById('input');
-          const mensagemSingle = document.querySelectorAll('.mensagemSingle');
-          const onlineUsersList = document.getElementById('online-users-list');
-      
-          ////////////////////////////////////////
-
-          (async ()=>{
-            const JSON = await fetch('/auth/mensagens');
-            if(!JSON.ok){
-              throw new Error('Erro ao buscar notificações');
-            }
-      
-            const dadosJSON = await JSON.json();
-            const mensagensUsuarioAtual = dadosJSON.filter((mensagem)=> mensagem.professor === nomeUsuarioAtual);
-      
-            mensagemSingle.forEach((mensagem)=>{
-              const mensagemTexto = mensagem.textContent;
-              const nomeProfessor = mensagemTexto.split(' ')[0];
-              const mensagemSemNome = mensagemTexto.replace(nomeProfessor + ' ', '');
-
-              if(nomeProfessor == nomeUsuarioAtual){
-                mensagem.textContent = mensagemSemNome;
-                mensagem.style.backgroundColor = 'RGBA(109,59,184,0.38)'
-                mensagem.classList.add('mensagemUsuarioAtual');
-              }
-            });
-          })();
-
-          ////////////////////////////////////////////////
-      
-          socket.emit('new user', nomeUsuarioAtual);
-      
-          form.addEventListener('submit', async (e)=>{
-            e.preventDefault();
-            if(input.value){
-              socket.emit('chat message',{msg:input.value, nome:nomeUsuarioAtual});
-              input.value = '';
-            }
-          });
-          
-          socket.on('chat message', async (obj)=>{
-            if(obj.nome == nomeUsuarioAtual){
-              const item = document.createElement('li');
-              item.setAttribute('name', 'mensagem');
-              item.style.backgroundColor = 'RGBA(109,59,184,0.38)';
-              item.classList.add('mensagemUsuarioAtual');
-              item.textContent = obj.msg;
-              messages.appendChild(item);
-              window.scrollTo(0, document.body.scrollHeight)
-      
-            }else{
-              const item = document.createElement('li');
-              const pNome = document.createElement('p');
-              const br = document.createElement('br');
-              const pMsg = document.createElement('p');
-              pNome.style.fontWeight = '600'
-              pNome.textContent = obj.nome;
-              pMsg.textContent = obj.msg;
-              messages.appendChild(item);
-              item.appendChild(pNome);
-              item.appendChild(br);
-              item.appendChild(pMsg);
-              window.scrollTo(0, document.body.scrollHeight)
-            }
-          });
-
-          ////////////////////////////////
-
-          socket.on('online users', (users)=>{
-            onlineUsersList.innerHTML = '';
-
-            users.forEach((user)=>{
-              const listItem = document.createElement('li');
-              listItem.style.color = 'white'
-              if(user == nomeUsuarioAtual){
-
-              }else{
-                listItem.textContent = `✅ ` +user;
-                onlineUsersList.appendChild(listItem);
-              }
-            });
-          });
-          
-          ///////////////////////////////////////////
-
-
-          function verifyPerfilSecretaria(){
-            if(perfilSecretaraia === 'false'){
-              gerenciadorUsuariosMenu.forEach(e =>{e.style.display = 'none'});
-            }
-          }
-          verifyPerfilSecretaria();
-          });
-      </script>
-    </div>
-  </div>
-</div>
-
 <% if (flashMessages.error) { %>
   <div class="flash-message error-message error">
     <%= flashMessages.error %>
     <button class="close-btn" onclick="closeFlash(this)">❌</button>
   </div>
 <% } %>
-
 <% if (flashMessages.success) { %>
   <div class="flash-message success-message success">
     <%= flashMessages.success %>
     <button class="close-btn" onclick="closeFlash(this)">❌</button>
   </div>
 <% } %>
+
+<%- include('partials/headerChat.html') %>
+  <div class="main-content2">
+    <div id="chat">
+      <ul id="messages">
+        <h3 id="h32" style="text-align: center;">Mensagens antigas</h3>
+        <br>
+        <form id="moreMessage" action="/auth/chat/increase-limit" method="POST">
+          <button class="more" type="submit">Carregar mais mensagens</button>
+        </form>
+        <br>
+        <% mensagem.forEach((mensagem)=>{ %>
+          <li class="mensagemSingle"><p style="font-weight: 600;"><%= mensagem.professor %></p> <br><p><%= mensagem.mensagem %></p></li>
+        
+          <form action="/auth/mensagem/<%= mensagem._id %>/delete" class="add-comment">
+            <div class="modal myModal">
+              <div class="modal-content">
+                <span class="closeModal">❌</span>
+                <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir a mensagem:
+                  <p><%= mensagem.mensagem %> ?</p>
+                </p>
+                <br><br>
+                <div class="buttons">
+                  <button>Confirmar</button>
+                  <button type="button" class="btnVoltar">Voltar</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        <% }); %>
+        <br>
+        <h3 class="H3" id="h3" style="text-align: center;">Mensagens recentes</h3>
+        <br>
+      </ul>
+    <form id="form">
+      <input maxlength="3000" id="input" autocomplete="off" /><button><h2><i class="fas fa-paper-plane"></i></h2></button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const perfilSecretaraia = '<%= user.perfilSecretaria %>';
+      const gerenciadorUsuariosMenu = document.querySelectorAll('.gerenciadorUsuariosMenu');
+      const nomeUsuarioAtual = '<%= user.apelido %>';
+      const messages = document.getElementById('messages');
+      const form = document.getElementById('form');
+      const input = document.getElementById('input');
+      const mensagemSingle = document.querySelectorAll('.mensagemSingle');
+      const onlineUsersList = document.getElementById('online-users-list');
+      const formMoreMessage = document.getElementById('moreMessage');
+      const h31 = document.getElementById('h3');
+      const h32 = document.getElementById('h32');
+
+
+      document.addEventListener('DOMContentLoaded', ()=>{
+        (async ()=>{
+          const JSON = await fetch('/auth/mensagens');
+          if(!JSON.ok){
+            throw new Error('Erro ao buscar notificações');
+          }
+          
+          const dadosJSON = await JSON.json();
+          const mensagensUsuarioAtual = dadosJSON.filter((mensagem)=> mensagem.professor === nomeUsuarioAtual);
+          
+          
+          mensagemSingle.forEach((mensagem, index)=>{
+            const mensagemTexto = mensagem.textContent;
+            const nomeProfessor = mensagemTexto.split(' ')[0];;
+            const mensagemSemNome = mensagemTexto.replace(nomeProfessor + ' ', '');
+
+            if(nomeProfessor === nomeUsuarioAtual){
+              mensagem.textContent = mensagemSemNome;
+              mensagem.style.backgroundColor = 'RGBA(109,59,184,0.38)'
+              mensagem.classList.add('mensagemUsuarioAtual');
+            }
+
+            if(perfilSecretaraia === 'true'){
+              let p1 = document.createElement('p');
+              let a1 = document.createElement('a');
+              // let br1 = document.createElement('br');
+              let conteudoMensagem = mensagem.firstChild;
+
+              a1.href = `/auth/mensagem/${dadosJSON[index]._id}/delete`;
+              a1.textContent = '❌';
+              a1.style.textDecoration = 'none';
+              p1.appendChild(a1);
+              p1.classList.add('btn_x');
+
+              mensagem.insertBefore(p1, conteudoMensagem);
+              // mensagem.insertBefore(br1, conteudoMensagem);
+              
+              }
+          });
+
+          //////////////////////////////////////////
+
+          const deleteButtons = document.querySelectorAll(".btn_x");
+          const statusButtons = document.querySelectorAll('.statusBtn');
+          const modals = document.querySelectorAll(".myModal");
+          const closeModal = document.querySelectorAll(".closeModal");
+          const btnVoltar = document.querySelectorAll('.btnVoltar');
+          const noMessage = mensagemSingle.length == dadosJSON.length;
+
+          const mostrarModal = (indice) => {
+            modals[indice].style.display = "block";
+          };
+
+          deleteButtons.forEach((botaoExcluir, indice) => {
+            botaoExcluir.addEventListener("click", (e) => {
+              e.preventDefault();
+              mostrarModal(indice);
+            });
+          });
+
+          btnVoltar.forEach((fechar) => {
+          fechar.addEventListener("click", () => {
+            modals.forEach((modal) => {
+              modal.style.display = "none";
+            });
+          });
+        });
+
+          closeModal.forEach((fechar) => {
+            fechar.addEventListener("click", () => {
+              modals.forEach((modal) => {
+                modal.style.display = "none";
+              });
+            });
+          });
+
+          window.addEventListener("click", (evento) => {
+          modals.forEach((modal) => {
+            if (evento.target === modal) {
+              modal.style.display = "none";
+            }
+          });
+        });
+
+        //////////////////////////////////////////
+        
+        if(mensagemSingle.length <= 7 || noMessage == true){
+          h32.textContent = 'Não há mais mensagens para carregar.';
+          formMoreMessage.style.display = 'none';
+          h31.style.display = 'none';
+        }
+
+        })();
+        
+        ////////////////////////////////////////////////
+    
+        socket.emit('new user', nomeUsuarioAtual);
+    
+        form.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          if(input.value){
+            socket.emit('chat message', {msg:input.value, nome:nomeUsuarioAtual});
+            input.value = '';
+          }
+        });
+        
+        socket.on('chat message', async (obj)=>{
+          if(obj.nome == nomeUsuarioAtual){
+            const item = document.createElement('li');
+            item.setAttribute('name', 'mensagem');
+            item.style.backgroundColor = 'RGBA(109,59,184,0.38)';
+            item.classList.add('mensagemUsuarioAtual');
+            item.textContent = obj.msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight)
+    
+          }else{
+            const item = document.createElement('li');
+            const pNome = document.createElement('p');
+            const br = document.createElement('br');
+            const pMsg = document.createElement('p');
+            pNome.style.fontWeight = '600'
+            pNome.textContent = obj.nome;
+            pMsg.textContent = obj.msg;
+            messages.appendChild(item);
+            item.appendChild(pNome);
+            item.appendChild(br);
+            item.appendChild(pMsg);
+            window.scrollTo(0, document.body.scrollHeight)
+          }
+        });
+
+        ////////////////////////////////
+
+        socket.on('online users', (users)=>{
+          onlineUsersList.innerHTML = '';
+
+          users.forEach((user)=>{
+            const listItem = document.createElement('li');
+            listItem.style.color = 'white'
+            if(user == nomeUsuarioAtual){
+
+            }else{
+              listItem.textContent = `✅ ` +user;
+              onlineUsersList.appendChild(listItem);
+            }
+          });
+        });
+        
+        ///////////////////////////////////////////
+
+        function verifyPerfilSecretaria(){
+          if(perfilSecretaraia === 'false'){
+            gerenciadorUsuariosMenu.forEach(e =>{e.style.display = 'none'});
+          }
+        }
+        verifyPerfilSecretaria();
+        });
+      
+
+      </script>
+    </div>
+  </div>
+</div>
 <%- include('partials/footer.html') %>

@@ -52,16 +52,13 @@ router.post('/verifyLoginProfessor', verifyToken, async (req,res)=>{
     }
     try{
         const tokenCreateProfessor = jwt.sign(
-        {
-            id:user._id,
-        },
-        secret,
-        {
-            expiresIn: '300s',
-        }
+            {id:user._id}, 
+            secret,
+            { expiresIn: '30m',algorithm: 'HS256' },
         );
         
-        res.cookie('_mmsa_prod_intercome', tokenCreateProfessor, {httpOnly:true, maxAge:300000, secure:true, sameSite:'Strict'});
+        res.cookie('_mmsa_prod_intercome', tokenCreateProfessor, {httpOnly:true, maxAge:1800000});
+        //secure:true, sameSite:'Strict'
         return res.redirect('/auth/registerProfessor');
 
     }catch(err){

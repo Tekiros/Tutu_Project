@@ -2,7 +2,7 @@ const deleteButtons = document.querySelectorAll(".deleteProfileBtn");
 const statusButtons = document.querySelectorAll('.statusBtn');
 const modals = document.querySelectorAll(".myModal");
 const closeModal = document.querySelectorAll(".closeModal");
-const btnVoltar = document.querySelector('.btnVoltar');
+const btnVoltar = document.querySelectorAll('.btnVoltar');
 
 const mostrarModal = (indice) => {
   modals[indice].style.display = "block";
@@ -15,9 +15,11 @@ deleteButtons.forEach((botaoExcluir, indice) => {
   });
 });
 
-btnVoltar.addEventListener("click", () => {
-  modals.forEach((modal) => {
-    modal.style.display = "none";
+btnVoltar.forEach((fechar) => {
+  fechar.addEventListener("click", () => {
+    modals.forEach((modal) => {
+      modal.style.display = "none";
+    });
   });
 });
 

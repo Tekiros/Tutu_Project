@@ -338,12 +338,12 @@ cursor: pointer;
 
 .panel h2 #editProfileBtn{
     color: #717171;
-    transition: transform 0.5s ease; /* Adiciona uma transição suave para a rotação */
+    transition: transform 0.5s ease;
 }
 
 .panel h2 #editProfileBtn:hover{
 	color: #6D3BB8;
-  transform: rotate(180deg); /* Aplica uma rotação de 360 graus quando o mouse estiver sobre o botão */
+  transform: rotate(180deg);
 }
 
 #editProfileText {
@@ -726,8 +726,11 @@ button.statusBtnGreen:hover {
 }
 
 #messages .mensagemUsuarioAtual{
-	display: flex; 
+	display: flex;
 	justify-content: flex-end;
+	flex-direction: column;
+	align-content: flex-end;
+	flex-wrap: wrap;
 }
 
 #moreMessage{
@@ -740,6 +743,16 @@ button.statusBtnGreen:hover {
 	justify-content: center;
 	list-style-type: none;
 	justify-content: space-around;
+}
+
+p.btn_x{
+	display: flex;
+	justify-content: flex-end;
+	cursor: pointer;
+}
+
+.btn-x:hover{
+	font-size: 17px;
 }
 
 .passwordRegiter{
@@ -767,6 +780,10 @@ th {
 
 tr:nth-child(even) {
 	background-color: #f9f9f9;
+}
+
+.hoverColorPanel:hover{
+	background-color: rgba(125, 122, 122, 0.5);
 }
 
 #h2Professores, #h2Alunos{
@@ -822,6 +839,8 @@ a.hoverColor:hover{
 	box-shadow: 0 0 10px rgba(125, 122, 122, 0.5); 
 }
 
+
+
 @media screen and (max-width: 900px){
 	header{display: block;}
 	.ultimas-atividades{display: none;}
@@ -832,6 +851,7 @@ a.hoverColor:hover{
 		z-index: 9999;
 		width: 50%!important;
 		float: none;
+		transition: width 0.3s ease!important;
 	}
 	div.content1{
 		width: 100%;
@@ -876,6 +896,7 @@ a.hoverColor:hover{
 @media screen and (max-width: 500px){
 	.sidebar{
 		width: 70%!important;
+		transition: width 0.3s ease!important;
 	}
 	input.placeholder-colorHome{
 		width: 130% !important;

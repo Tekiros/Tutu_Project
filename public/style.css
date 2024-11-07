@@ -719,7 +719,7 @@ button.statusBtnGreen:hover {
 }
 
 #messages > li{
-	background-color: white; 
+	background-color: #EAEBEB; 
 	border-radius: 20px; 
 	margin: 7px; 
 	padding: 0.5rem 1rem;

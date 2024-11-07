@@ -15,7 +15,8 @@
   <div class="main-content2">
     <div id="chat">
       <ul id="messages">
-        <h3 id="h32" style="text-align: center;">Mensagens antigas</h3>
+        <br>
+        <h3 id="h32" style="text-align: center;">Mensagens anteriores</h3>
         <br>
         <form id="moreMessage" action="/auth/chat/increase-limit" method="POST">
           <button class="more" type="submit">Carregar mais mensagens</button>
@@ -29,9 +30,10 @@
               <div class="modal-content">
                 <span class="closeModal">❌</span>
                 <p style="color: #2d3035;font-size: 20px;" id="textModal">Você tem certeza que deseja excluir a mensagem:
-                  <p><%= mensagem.mensagem %> ?</p>
+                  <br><br>
+                  <p>" <%= mensagem.professor %>: <%= mensagem.mensagem %> "</p>
                 </p>
-                <br><br>
+                <br>
                 <div class="buttons">
                   <button>Confirmar</button>
                   <button type="button" class="btnVoltar">Voltar</button>
@@ -62,6 +64,7 @@
       const formMoreMessage = document.getElementById('moreMessage');
       const h31 = document.getElementById('h3');
       const h32 = document.getElementById('h32');
+      const br = document.createElement('br');
 
 
       document.addEventListener('DOMContentLoaded', ()=>{
@@ -89,7 +92,6 @@
             if(perfilSecretaraia === 'true'){
               let p1 = document.createElement('p');
               let a1 = document.createElement('a');
-              // let br1 = document.createElement('br');
               let conteudoMensagem = mensagem.firstChild;
 
               a1.href = `/auth/mensagem/${dadosJSON[index]._id}/delete`;
@@ -98,9 +100,7 @@
               p1.appendChild(a1);
               p1.classList.add('btn_x');
 
-              mensagem.insertBefore(p1, conteudoMensagem);
-              // mensagem.insertBefore(br1, conteudoMensagem);
-              
+              mensagem.insertBefore(p1, conteudoMensagem);            
               }
           });
 
@@ -149,7 +149,7 @@
         });
 
         //////////////////////////////////////////
-        
+  
         if(mensagemSingle.length <= 7 || noMessage == true){
           h32.textContent = 'Não há mais mensagens para carregar.';
           formMoreMessage.style.display = 'none';
@@ -183,7 +183,6 @@
           }else{
             const item = document.createElement('li');
             const pNome = document.createElement('p');
-            const br = document.createElement('br');
             const pMsg = document.createElement('p');
             pNome.style.fontWeight = '600'
             pNome.textContent = obj.nome;
@@ -224,7 +223,7 @@
         });
       
 
-      </script>
+    </script>
     </div>
   </div>
 </div>
